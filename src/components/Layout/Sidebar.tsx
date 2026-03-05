@@ -22,6 +22,7 @@ import {
   Psychology as SkillsIcon,
 } from "@mui/icons-material";
 import { useAuth } from "../../context/AuthContext";
+import { brand } from "../../theme";
 
 /* Ancho fijo del sidebar */
 export const SIDEBAR_WIDTH = 260;
@@ -66,7 +67,7 @@ export default function Sidebar() {
         "& .MuiDrawer-paper": {
           width: SIDEBAR_WIDTH,
           boxSizing: "border-box",
-          bgcolor: "primary.dark",
+          background: `linear-gradient(180deg, ${brand.navy} 0%, #16213e 100%)`,
           color: "white",
         },
       }}
@@ -91,13 +92,13 @@ export default function Sidebar() {
                 selected={isActive}
                 sx={{
                   mx: 1,
-                  borderRadius: 1,
+                  borderRadius: 2,
                   mb: 0.5,
-                  color: "rgba(255,255,255,0.7)",
+                  color: "rgba(255,255,255,0.6)",
                   "&.Mui-selected": {
-                    bgcolor: "rgba(255,255,255,0.15)",
+                    bgcolor: brand.purple,
                     color: "white",
-                    "&:hover": { bgcolor: "rgba(255,255,255,0.2)" },
+                    "&:hover": { bgcolor: brand.purpleLight },
                   },
                   "&:hover": { bgcolor: "rgba(255,255,255,0.08)" },
                 }}

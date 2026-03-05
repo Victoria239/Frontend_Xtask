@@ -14,9 +14,9 @@ import { useAuth } from "../../context/AuthContext";
 import { SIDEBAR_WIDTH } from "./Sidebar";
 
 /* Colores por rol */
-const roleColors: Record<string, "error" | "warning" | "default"> = {
-  admin: "error",
-  manager: "warning",
+const roleColors: Record<string, "primary" | "secondary" | "default"> = {
+  admin: "primary",
+  manager: "secondary",
   user: "default",
 };
 
