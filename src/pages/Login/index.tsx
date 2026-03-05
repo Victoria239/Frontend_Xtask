@@ -1,7 +1,7 @@
 /* Página de Login — split-screen con branding + formulario */
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import {
   Box,
   TextField,
@@ -37,7 +37,6 @@ const features = [
 ];
 
 export default function LoginPage() {
-  const navigate = useNavigate();
   const { login, isAuthenticated } = useAuth();
 
   /* Estado del formulario */
@@ -49,8 +48,7 @@ export default function LoginPage() {
 
   /* Si ya está autenticado, redirigir al dashboard */
   if (isAuthenticated) {
-    navigate("/", { replace: true });
-    return null;
+    return <Navigate to="/" replace />;
   }
 
   /* Enviar formulario de login */
@@ -66,7 +64,6 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login({ identifier: identifier.trim(), password });
-      navigate("/", { replace: true });
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { error?: string } } };
       setError(axiosError.response?.data?.error || "Error al iniciar sesión");

@@ -2,8 +2,8 @@
 
 import axios from "axios";
 
-/* Base URL del backend */
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+/* Base URL: relativa para que el proxy de Vite la gestione en desarrollo */
+const API_BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 /* Instancia Axios configurada */
 const apiClient = axios.create({

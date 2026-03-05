@@ -23,6 +23,7 @@ import {
 } from "@mui/icons-material";
 import { useAuth } from "../../context/AuthContext";
 import { brand } from "../../theme";
+import logoXtask from "../../assets/Xtask logo png.png";
 
 /* Ancho fijo del sidebar */
 export const SIDEBAR_WIDTH = 260;
@@ -72,11 +73,14 @@ export default function Sidebar() {
         },
       }}
     >
-      {/* Logo / título */}
-      <Toolbar>
-        <Typography variant="h5" fontWeight={700} color="white">
-          XTask
-        </Typography>
+      {/* Logo */}
+      <Toolbar sx={{ py: 2 }}>
+        <Box
+          component="img"
+          src={logoXtask}
+          alt="XTask"
+          sx={{ height: 44 }}
+        />
       </Toolbar>
       <Divider sx={{ borderColor: "rgba(255,255,255,0.15)" }} />
 

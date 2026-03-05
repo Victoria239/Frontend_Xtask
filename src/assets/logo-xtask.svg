@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
+  <!-- X letter with tech circuit style -->
+  <path d="M10 10L30 30L10 50" stroke="#00d4aa" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M35 10L15 30L35 50" stroke="#00bcd4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Circuit dots -->
+  <circle cx="10" cy="10" r="3" fill="#00d4aa"/>
+  <circle cx="35" cy="10" r="3" fill="#00bcd4"/>
+  <circle cx="10" cy="50" r="3" fill="#00d4aa"/>
+  <circle cx="35" cy="50" r="3" fill="#00bcd4"/>
+  <!-- Small circuit line -->
+  <line x1="35" y1="50" x2="45" y2="50" stroke="#00bcd4" stroke-width="2"/>
+  <circle cx="45" cy="50" r="2" fill="#00bcd4"/>
+  <!-- task text -->
+  <text x="48" y="42" font-family="'Inter', 'Segoe UI', sans-serif" font-size="32" font-weight="700" fill="white">
+    <tspan>task</tspan>
+  </text>
+</svg>
