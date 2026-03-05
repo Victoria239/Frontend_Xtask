@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./context/AuthContext";
 import theme from "./theme";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { MainLayout } from "./components/Layout";
 import LoginPage from "./pages/Login";
 import DashboardPage from "./pages/Dashboard";
 
@@ -31,10 +32,12 @@ function App() {
               {/* Ruta pública */}
               <Route path="/login" element={<LoginPage />} />
 
-              {/* Rutas protegidas (requieren autenticación) */}
+              {/* Rutas protegidas con layout (Sidebar + Navbar) */}
               <Route element={<ProtectedRoute />}>
-                <Route path="/" element={<DashboardPage />} />
-                {/* Aquí se agregarán las demás páginas */}
+                <Route element={<MainLayout />}>
+                  <Route path="/" element={<DashboardPage />} />
+                  {/* Aquí se agregarán las demás páginas */}
+                </Route>
               </Route>
             </Routes>
           </BrowserRouter>
