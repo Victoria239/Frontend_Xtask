@@ -1,0 +1,172 @@
+/* ── Landing Page Animations & Styles ── */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap');
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+
+/* ── Scroll fade-in ── */
+.fade-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ══════════ ABSTRACT BACKGROUND ══════════ */
+
+/* Organic wave veils */
+@keyframes waveFloat1 {
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  25%      { transform: translateY(-18px) rotate(1deg) scale(1.02); }
+  50%      { transform: translateY(10px) rotate(-0.5deg) scale(0.98); }
+  75%      { transform: translateY(-8px) rotate(0.5deg) scale(1.01); }
+}
+@keyframes waveFloat2 {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  33%      { transform: translateX(20px) rotate(0.5deg); }
+  66%      { transform: translateX(-15px) rotate(-0.5deg); }
+}
+@keyframes waveFloat3 {
+  0%, 100% { transform: translateY(0) scaleX(1); }
+  50%      { transform: translateY(-12px) scaleX(1.03); }
+}
+
+.wave-veil-1 { animation: waveFloat1 16s ease-in-out infinite; }
+.wave-veil-2 { animation: waveFloat2 20s ease-in-out infinite; }
+.wave-veil-3 { animation: waveFloat3 14s ease-in-out infinite; }
+
+/* Floating 3D cubes */
+@keyframes cubeFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25%      { transform: translateY(-20px) rotate(12deg); }
+  50%      { transform: translateY(-8px) rotate(22deg); }
+  75%      { transform: translateY(-16px) rotate(8deg); }
+}
+@keyframes cubeFloat2 {
+  0%, 100% { transform: translateY(0) rotate(45deg); }
+  33%      { transform: translateY(-15px) rotate(55deg); }
+  66%      { transform: translateY(-25px) rotate(38deg); }
+}
+@keyframes cubeFloat3 {
+  0%, 100% { transform: translateY(0) rotate(15deg); }
+  50%      { transform: translateY(-18px) rotate(30deg); }
+}
+
+.float-cube-1 { animation: cubeFloat 12s ease-in-out infinite; }
+.float-cube-2 { animation: cubeFloat2 16s ease-in-out infinite; }
+.float-cube-3 { animation: cubeFloat3 14s ease-in-out infinite; }
+
+/* Floating spheres */
+@keyframes sphereFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(12px, -18px) scale(1.05); }
+  66%      { transform: translate(-8px, 10px) scale(0.96); }
+}
+@keyframes sphereFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-15px, -22px) scale(1.04); }
+}
+@keyframes sphereFloat3 {
+  0%, 100% { transform: translate(0, 0); }
+  25%      { transform: translate(10px, -14px); }
+  75%      { transform: translate(-8px, 8px); }
+}
+
+.float-sphere-1 { animation: sphereFloat1 18s ease-in-out infinite; }
+.float-sphere-2 { animation: sphereFloat2 13s ease-in-out infinite; }
+.float-sphere-3 { animation: sphereFloat3 16s ease-in-out infinite; }
+
+/* Bokeh particles */
+@keyframes bokehDrift1 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.25; }
+  50%      { transform: translate(30px, -20px); opacity: 0.45; }
+}
+@keyframes bokehDrift2 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.2; }
+  50%      { transform: translate(-20px, -30px); opacity: 0.4; }
+}
+@keyframes bokehDrift3 {
+  0%, 100% { transform: translate(0, 0); opacity: 0.15; }
+  50%      { transform: translate(25px, 15px); opacity: 0.35; }
+}
+
+.bokeh-1 { animation: bokehDrift1 10s ease-in-out infinite; }
+.bokeh-2 { animation: bokehDrift2 14s ease-in-out infinite; }
+.bokeh-3 { animation: bokehDrift3 12s ease-in-out infinite; }
+
+/* Soft blob glow (existing but updated) */
+@keyframes blobFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(30px, -20px) scale(1.05); }
+  66%      { transform: translate(-20px, 15px) scale(0.95); }
+}
+@keyframes blobFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(-25px, 25px) scale(1.04); }
+  66%      { transform: translate(20px, -15px) scale(0.96); }
+}
+@keyframes blobFloat3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(15px, -25px) scale(1.06); }
+}
+.blob-1 { animation: blobFloat1 12s ease-in-out infinite; }
+.blob-2 { animation: blobFloat2 15s ease-in-out infinite; }
+.blob-3 { animation: blobFloat3 18s ease-in-out infinite; }
+
+/* ══════════ CARD EFFECTS ══════════ */
+
+/* Card hover premium */
+.landing-card {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.landing-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.12) !important;
+}
+
+/* Step card hover */
+.step-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.step-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.1) !important;
+  border-color: #7C3AED !important;
+}
+
+/* Sector card glow */
+.sector-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.sector-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(circle at center, rgba(124,58,237,0.06), transparent 70%);
+}
+.sector-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.1) !important;
+}
+.sector-card:hover::after {
+  opacity: 1;
+}
+
+/* Footer link hover */
+.footer-link {
+  transition: color 0.2s ease, padding-left 0.2s ease;
+  cursor: pointer;
+}
+.footer-link:hover {
+  color: #8b5cf6 !important;
+  padding-left: 4px;
+}
