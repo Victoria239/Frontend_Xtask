@@ -17,6 +17,7 @@ export interface BudgetCreate {
   name: string;
   description?: string;
   total_amount: number;
+  project_id?: number;
   start_date?: string;
   end_date?: string;
 }
