@@ -9,7 +9,8 @@ export interface Payroll {
   deductions: number;
   net_salary: number;
   status: string;
-  payment_date: string | null;
+  paid_date: string | null;
+  notes: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -26,7 +27,7 @@ export interface PayrollUpdate {
   base_salary?: number;
   bonuses?: number;
   deductions?: number;
-  payment_date?: string;
+  paid_date?: string;
 }
 
 export interface PayrollStatusUpdate {
