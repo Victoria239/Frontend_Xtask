@@ -65,6 +65,7 @@ export default function DashboardPage() {
   });
   const [totalEmployees, setTotalEmployees] = useState(0);
   const [totalBudgets, setTotalBudgets] = useState(0);
+  const [totalBudgetAmount, setTotalBudgetAmount] = useState(0);
 
   /* Cargar todos los datos reales al montar */
   useEffect(() => {
@@ -74,13 +75,16 @@ export default function DashboardPage() {
           projectsApi.getProjectIndicators(),
           payrollApi.getPayrollMetrics(),
           employeesApi.getEmployees({ pageSize: 1 }),
-          financeApi.getBudgets({ pageSize: 1 }),
+          financeApi.getBudgets({ pageSize: 200 }),
         ]);
 
         if (projRes.status === "fulfilled") setIndicators(projRes.value);
         if (payRes.status === "fulfilled") setMetrics(payRes.value);
         if (empRes.status === "fulfilled") setTotalEmployees(empRes.value.pagination?.total ?? 0);
-        if (budRes.status === "fulfilled") setTotalBudgets(budRes.value.pagination?.total ?? 0);
+        if (budRes.status === "fulfilled") {
+          setTotalBudgets(budRes.value.pagination?.total ?? budRes.value.data.length);
+          setTotalBudgetAmount(budRes.value.data.reduce((sum: number, b: { total_amount: number }) => sum + (b.total_amount || 0), 0));
+        }
       } catch {
         setError("Error al cargar datos del dashboard");
       } finally {
@@ -126,9 +130,9 @@ export default function DashboardPage() {
       iconColor: brand.navy,
     },
     {
-      title: "Presupuestos",
-      value: totalBudgets,
-      subtitle: "Presupuestos activos",
+      title: "Presupuesto Total",
+      value: `$${totalBudgetAmount.toLocaleString("es-CO", { minimumFractionDigits: 0 })}`,
+      subtitle: `${totalBudgets} presupuestos registrados`,
       icon: <BudgetIcon />,
       iconColor: "#f59e0b",
     },
