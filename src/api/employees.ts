@@ -15,6 +15,10 @@ export const getEmployee = (id: number) =>
 export const createEmployee = (data: EmployeeCreate) =>
   apiClient.post<Employee>("/empleados", data).then((r) => r.data);
 
+/* Obtener usuarios del sistema (para vincular empleados) */
+export const getUsers = () =>
+  apiClient.get("/auth/me").then((r) => r.data);
+
 /* Actualizar empleado */
 export const updateEmployee = (id: number, data: EmployeeUpdate) =>
   apiClient.patch<Employee>(`/empleados/${id}`, data).then((r) => r.data);
@@ -25,4 +29,4 @@ export const deleteEmployee = (id: number) =>
 
 /* Asignar proyectos a un empleado */
 export const assignProjects = (id: number, projectIds: number[]) =>
-  apiClient.post(`/empleados/${id}/proyectos`, { project_ids: projectIds }).then((r) => r.data);
+  apiClient.put(`/empleados/${id}/proyectos`, { project_ids: projectIds }).then((r) => r.data);
