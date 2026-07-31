@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0A">
+<title>XTask — La plataforma que responde con tus propias políticas</title>
+<meta name="description" content="HRM, compensación y gestión documental con un motor de IA que cita la política exacta que sostiene cada respuesta. Para empresas en Andorra, España y LATAM.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0A0A0A;
+    --bg-2:      #0D0D0D;
+    --surface:   #131313;
+    --surface-2: #171717;
+    --rule:      #1F1F1F;
+    --rule-2:    #2A2A2A;
+    --ink:       #F4F2EE;
+    --text-2:    #A8A29B;
+    --text-3:    #6B645C;
+    --text-4:    #443F39;
+    --accent:    #C76A3F;
+    --accent-2:  #DD8159;
+    --accent-d:  #5C2E18;
+    --sans:      'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --mono:      'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+    --ease-out:   cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-press: cubic-bezier(0.32, 0.72, 0, 1);
+    --ease-move:  cubic-bezier(0.77, 0, 0.175, 1);
+    --max:       1140px;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.55;
+    font-feature-settings: "ss01", "cv11";
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent-d); color: var(--ink); }
+
+  .container {
+    width: 100%;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 clamp(24px, 4vw, 56px);
+  }
+
+  /* ───────── navigation ───────── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(10, 10, 10, 0.72);
+    backdrop-filter: saturate(140%) blur(16px);
+    -webkit-backdrop-filter: saturate(140%) blur(16px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 200ms var(--ease-out);
+  }
+  nav.scrolled { border-bottom-color: var(--rule); }
+  nav .inner {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    font-size: 15.5px;
+    letter-spacing: -0.012em;
+  }
+  .logo-mark {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bg);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: -0.04em;
+  }
+  .nav-links {
+    display: none;
+    gap: 28px;
+    font-size: 14.5px;
+    color: var(--text-2);
+  }
+  .nav-links a { transition: color 160ms var(--ease-out); }
+  @media (hover: hover) and (pointer: fine) {
+    .nav-links a:hover { color: var(--ink); }
+  }
+  @media (min-width: 880px) { .nav-links { display: flex; } }
+
+  .btn {
+    --pad-y: 11px;
+    --pad-x: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: var(--pad-y) var(--pad-x);
+    border-radius: 8px;
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1;
+    border: 1px solid transparent;
+    cursor: pointer;
+    background: transparent;
+    color: var(--ink);
+    font-family: inherit;
+    letter-spacing: -0.005em;
+    transition: background 160ms var(--ease-out), border-color 160ms var(--ease-out), color 160ms var(--ease-out), transform 120ms var(--ease-press);
+    white-space: nowrap;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .btn-outline { border-color: var(--rule-2); color: var(--ink); }
+  .btn-ghost   { color: var(--text-2); }
+  .btn-lg { --pad-y: 14px; --pad-x: 26px; font-size: 15px; }
+  .btn .arrow { transition: transform 160ms var(--ease-out); }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover { background: #E6E4DF; border-color: #E6E4DF; }
+    .btn-outline:hover { border-color: #4A4A4A; background: var(--surface); }
+    .btn-ghost:hover   { color: var(--ink); }
+    .btn:hover .arrow  { transform: translateX(3px); }
+  }
+
+  /* ───────── hero ───────── */
+  .hero {
+    padding: clamp(80px, 12vw, 160px) 0 clamp(56px, 8vw, 96px);
+  }
+  .hero-inner { max-width: 880px; }
+  .badge-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    color: var(--text-2);
+    margin-bottom: 40px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+    transition: color 200ms var(--ease-out), border-color 200ms var(--ease-out);
+  }
+  .badge-line .ver {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+  .badge-line a { color: var(--ink); border-bottom: 1px solid var(--text-3); padding-bottom: 1px; }
+  @media (hover: hover) and (pointer: fine) {
+    .badge-line a:hover { border-color: var(--accent); color: var(--accent-2); }
+  }
+  h1 {
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    font-weight: 500;
+    margin: 0 0 28px;
+    text-wrap: balance;
+    color: var(--ink);
+  }
+  h1 em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--accent-2);
+  }
+  .lede {
+    font-size: clamp(17px, 1.6vw, 20px);
+    line-height: 1.5;
+    color: var(--text-2);
+    max-width: 640px;
+    margin: 0 0 40px;
+    letter-spacing: -0.005em;
+    text-wrap: pretty;
+  }
+  .cta-row {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .hint {
+    margin-top: 20px;
+    font-size: 13.5px;
+    color: var(--text-3);
+    max-width: 520px;
+  }
+
+  /* ───────── product proof: contract with citations ───────── */
+  .proof {
+    margin-top: clamp(72px, 10vw, 128px);
+    padding: 0 0 clamp(80px, 10vw, 120px);
+  }
+  .proof-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 32px;
+    padding-bottom: 24px;
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .proof-head h2 {
+    font-size: clamp(24px, 2.8vw, 32px);
+    margin: 0;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    line-height: 1.15;
+    max-width: 480px;
+  }
+  .proof-head .meta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-3);
+    flex-shrink: 0;
+    align-self: end;
+  }
+  .contract {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+    background: var(--bg-2);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  @media (min-width: 880px) {
+    .contract { grid-template-columns: 1.4fr 1fr; }
+  }
+  .contract-doc {
+    padding: 48px clamp(28px, 4vw, 56px);
+    background: var(--bg-2);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-2);
+  }
+  .contract-doc h3 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-3);
+    letter-spacing: 0.005em;
+    margin: 0 0 4px;
+    font-family: var(--mono);
+  }
+  .contract-doc .title {
+    font-size: 22px;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: -0.018em;
+    margin: 0 0 28px;
+    line-height: 1.2;
+  }
+  .contract-doc p { margin: 0 0 14px; }
+  .contract-doc .clause {
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-3);
+    font-weight: 500;
+    margin: 28px 0 8px;
+    font-family: var(--mono);
+  }
+  .cite-mark {
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    vertical-align: super;
+    line-height: 0;
+    margin-left: 2px;
+    padding: 1px 5px;
+    background: rgba(199, 106, 63, 0.08);
+    border-radius: 3px;
+    cursor: help;
+  }
+  .citations {
+    background: var(--bg);
+    border-left: 1px solid var(--rule);
+    padding: 48px clamp(28px, 3.5vw, 44px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .citations-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-3);
+    font-weight: 500;
+    margin: 0 0 8px;
+    font-family: var(--mono);
+  }
+  .citation {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 14px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+    transition: opacity 200ms var(--ease-out);
+  }
+  .citation:last-child { border-bottom: 0; padding-bottom: 0; }
+  .cite-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 500;
+    padding-top: 2px;
+  }
+  .citation-body { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+  .citation-source {
+    color: var(--ink);
+    font-size: 13.5px;
+    margin-bottom: 4px;
+  }
+  .citation-meta {
+    color: var(--text-3);
+    font-size: 12px;
+    margin-top: 6px;
+    font-family: var(--mono);
+  }
+
+  /* ───────── section primitives ───────── */
+  section { position: relative; }
+  .section { padding: clamp(80px, 10vw, 140px) 0; border-top: 1px solid var(--rule); }
+  h2 {
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+  h2 em { font-style: italic; font-weight: 500; color: var(--accent-2); }
+  .section-sub {
+    font-size: 17.5px;
+    color: var(--text-2);
+    line-height: 1.55;
+    max-width: 640px;
+    letter-spacing: -0.005em;
+    text-wrap: pretty;
+  }
+  .section-head { max-width: 720px; margin: 0 0 64px; }
+
+  /* ───────── features (asymmetric) ───────── */
+  .features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  @media (min-width: 880px) {
+    .features {
+      grid-template-columns: 1.4fr 1fr;
+      grid-template-rows: auto auto;
+    }
+    .feature-1 { grid-row: 1 / 3; }
+  }
+  .feature {
+    background: var(--bg);
+    padding: clamp(32px, 4vw, 48px);
+    transition: background 240ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .feature:hover { background: var(--bg-2); }
+  }
+  .feature-mark {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--accent);
+    margin-bottom: 24px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .feature h3 {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.018em;
+    margin: 0 0 14px;
+    line-height: 1.18;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .feature-1 h3 { font-size: 28px; }
+  .feature p {
+    color: var(--text-2);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+    letter-spacing: -0.003em;
+    max-width: 44ch;
+  }
+  .feature-1 p { font-size: 16.5px; max-width: 52ch; }
+  .feature-detail {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px;
+    color: var(--text-3);
+    line-height: 1.55;
+  }
+  .feature-detail strong { color: var(--ink); font-weight: 500; }
+
+  /* ───────── steps (inline, no 01/02/03) ───────── */
+  .steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(40px, 5vw, 64px);
+  }
+  @media (min-width: 720px) {
+    .steps {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 56px;
+      padding: 32px 0;
+      border-top: 1px solid var(--rule);
+      align-items: start;
+    }
+    .step:last-child { border-bottom: 1px solid var(--rule); }
+  }
+  .step-label {
+    font-size: 14.5px;
+    color: var(--text-3);
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    padding-top: 6px;
+  }
+  .step-body h3 {
+    font-size: clamp(22px, 2.4vw, 28px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+  .step-body p {
+    color: var(--text-2);
+    font-size: 16px;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 56ch;
+  }
+
+  /* ───────── trust strip ───────── */
+  .trust {
+    border-top: 1px solid var(--rule);
+    padding: 56px 0;
+  }
+  .trust-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    align-items: baseline;
+  }
+  @media (min-width: 720px) {
+    .trust-row { grid-template-columns: 1fr 2fr; gap: 64px; }
+  }
+  .trust-label {
+    font-size: 14.5px;
+    color: var(--text-3);
+    letter-spacing: -0.005em;
+  }
+  .trust-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 36px 48px;
+    color: var(--ink);
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+  .trust-list span {
+    transition: color 200ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .trust-list span:hover { color: var(--accent-2); }
+  }
+
+  /* ───────── pricing ───────── */
+  .pricing {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  @media (min-width: 880px) { .pricing { grid-template-columns: repeat(3, 1fr); } }
+  .tier {
+    background: var(--bg-2);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 240ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .tier:hover { border-color: var(--rule-2); }
+  }
+  .tier-featured {
+    border-color: var(--accent-d);
+    background: var(--bg-2);
+  }
+  .tier-rec {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 18px;
+    letter-spacing: -0.005em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tier-rec::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .tier-spacer { height: 31px; }
+  .tier-name {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--text-2);
+    margin-bottom: 12px;
+    letter-spacing: -0.005em;
+  }
+  .tier-price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .tier-price .num {
+    font-size: 44px;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .tier-price .per { font-size: 14.5px; color: var(--text-3); }
+  .tier-desc {
+    color: var(--text-2);
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin: 0 0 28px;
+    min-height: 64px;
+  }
+  .tier .btn { width: 100%; }
+  .tier-list {
+    list-style: none;
+    padding: 28px 0 0;
+    margin: 28px 0 0;
+    border-top: 1px solid var(--rule);
+    flex: 1;
+  }
+  .tier-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text-2);
+    padding: 6px 0;
+    line-height: 1.55;
+  }
+  .tier-list li::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--text-3);
+    margin-top: 9px;
+    flex-shrink: 0;
+  }
+  .tier-featured .tier-list li::before { background: var(--accent); }
+
+  /* ───────── final cta ───────── */
+  .cta-section {
+    border-top: 1px solid var(--rule);
+    padding: clamp(80px, 10vw, 140px) 0;
+  }
+  .cta-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .cta-inner h2 { margin: 0 0 20px; }
+  .cta-inner p {
+    color: var(--text-2);
+    max-width: 540px;
+    margin: 0 auto 36px;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .cta-row.centered { justify-content: center; }
+
+  /* ───────── footer ───────── */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 64px 0 32px;
+  }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+    margin-bottom: 56px;
+  }
+  @media (min-width: 720px) {
+    .foot-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+  }
+  .foot-brand { max-width: 320px; }
+  .foot-brand p {
+    color: var(--text-3);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 16px 0 0;
+  }
+  .foot-col h4 {
+    font-size: 14.5px;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: -0.008em;
+    margin: 0 0 18px;
+  }
+  .foot-col ul { list-style: none; padding: 0; margin: 0; }
+  .foot-col li { margin: 0 0 12px; }
+  .foot-col a {
+    font-size: 14px;
+    color: var(--text-2);
+    transition: color 160ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .foot-col a:hover { color: var(--ink); }
+  }
+  .foot-bottom {
+    border-top: 1px solid var(--rule);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-3);
+  }
+  .foot-bottom-links { display: inline-flex; gap: 24px; }
+  @media (hover: hover) and (pointer: fine) {
+    .foot-bottom-links a:hover { color: var(--text-2); }
+  }
+
+  /* ───────── motion: stagger via @starting-style ───────── */
+  .stagger > * {
+    transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+  }
+  @starting-style {
+    .stagger.in > * {
+      opacity: 0.6;
+      transform: translateY(8px);
+    }
+  }
+
+  /* ───────── reduced motion ───────── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+    .btn:active { transform: none; }
+  }
+
+  /* sr-only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+</head>
+<body>
+
+<h1 class="sr-only">XTask, plataforma empresarial con motor RAG nativo que cita las políticas internas de la empresa en cada respuesta del asistente.</h1>
+
+<nav id="nav">
+  <div class="inner container">
+    <a class="logo" href="/" aria-label="XTask inicio">
+      <span class="logo-mark">X</span>
+      <span>XTask</span>
+    </a>
+    <div class="nav-links" aria-label="Navegación principal">
+      <a href="#producto">Producto</a>
+      <a href="#funciona">Cómo funciona</a>
+      <a href="#precios">Precios</a>
+      <a href="#docs">Documentación</a>
+    </div>
+    <div style="display: inline-flex; gap: 8px;">
+      <a href="https://app.xtask.io" class="btn btn-ghost">Iniciar sesión</a>
+      <a href="#cta" class="btn btn-primary">Solicitar demo <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <p class="badge-line">
+        <span class="ver">v0.2</span>
+        <span>Motor RAG y copiloto en producción.</span>
+        <a href="#changelog">Ver el changelog.</a>
+      </p>
+      <h1>
+        La plataforma empresarial que <em>cita</em> sus propias respuestas.
+      </h1>
+      <p class="lede">
+        XTask integra HRM, compensación variable y gestión documental sobre un motor de IA que nunca inventa: cada respuesta indica la política, contrato o métrica exacta que la respalda. Construida en Andorra para empresas que necesitan trazar todo lo que dicen.
+      </p>
+      <div class="cta-row">
+        <a href="#cta" class="btn btn-primary btn-lg">Solicitar demo <span class="arrow">→</span></a>
+        <a href="#funciona" class="btn btn-outline btn-lg">Ver cómo funciona</a>
+      </div>
+      <p class="hint">Sin tarjeta. Piloto gratuito de 30 días con tu propio corpus de políticas.</p>
+    </div>
+  </div>
+
+  <section class="proof container" aria-labelledby="proof-title">
+    <div class="proof-head">
+      <h2 id="proof-title">Cada cláusula muestra de dónde viene.</h2>
+      <span class="meta">contrato generado · 12 jun 2026</span>
+    </div>
+
+    <article class="contract" aria-label="Ejemplo de contrato generado por XTask con citas marginales">
+      <div class="contract-doc">
+        <h3>XTASK / EMPLEADOS</h3>
+        <p class="title">Contrato de tiempo indefinido — Ana García Martínez</p>
+
+        <p class="clause">Cláusula 4 · Vacaciones</p>
+        <p>
+          La empleada disfrutará de <strong style="color: var(--ink); font-weight:500">veintidós días hábiles</strong> de vacaciones anuales, ampliables a <strong style="color: var(--ink); font-weight:500">veinticinco días</strong> tras superar los cinco años de antigüedad
+          <span class="cite-mark" title="Política de vacaciones 2026, sección 2.1">[1]</span>.
+          La solicitud requiere quince días naturales de antelación
+          <span class="cite-mark" title="Manual del empleado, capítulo 7">[2]</span>.
+        </p>
+
+        <p class="clause">Cláusula 5 · Teletrabajo</p>
+        <p>
+          Se autorizan hasta tres días de teletrabajo semanal, manteniendo la presencialidad los martes y jueves
+          <span class="cite-mark" title="Política de teletrabajo XTask 2026">[3]</span>.
+          La empresa aportará un subsidio mensual de ochenta euros para gastos derivados
+          <span class="cite-mark" title="Convenio colectivo, anexo III">[4]</span>.
+        </p>
+
+        <p class="clause">Cláusula 8 · Compensación variable</p>
+        <p>
+          El bono anual se calcula sobre el cumplimiento ponderado de tres OKR de equipo
+          <span class="cite-mark" title="Plan de compensación 2026 Q2">[5]</span>.
+        </p>
+      </div>
+      <aside class="citations" aria-label="Fuentes citadas en el documento">
+        <p class="citations-title">Fuentes consultadas en el corpus</p>
+
+        <div class="citation">
+          <span class="cite-num">[1]</span>
+          <div class="citation-body">
+            <p class="citation-source">Política de vacaciones 2026</p>
+            <p>Sección 2.1 — “Los empleados con antigüedad superior a cinco años reciben tres días hábiles adicionales sobre los veintidós base.”</p>
+            <p class="citation-meta">tenant · andorra-acme · ingestado 4 may 2026</p>
+          </div>
+        </div>
+
+        <div class="citation">
+          <span class="cite-num">[2]</span>
+          <div class="citation-body">
+            <p class="citation-source">Manual del empleado, cap. 7</p>
+            <p>Solicitudes de ausencia con quince días naturales de antelación, salvo emergencia justificada.</p>
+            <p class="citation-meta">tenant · andorra-acme · ingestado 4 may 2026</p>
+          </div>
+        </div>
+
+        <div class="citation">
+          <span class="cite-num">[3]</span>
+          <div class="citation-body">
+            <p class="citation-source">Política de teletrabajo XTask 2026</p>
+            <p>Martes y jueves presenciales para fomentar la colaboración del equipo extendido.</p>
+            <p class="citation-meta">tenant · andorra-acme · ingestado 11 may 2026</p>
+          </div>
+        </div>
+      </aside>
+    </article>
+  </section>
+</header>
+
+<!-- ───────── product ───────── -->
+<section id="producto" class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Tres capas de producto, <em>un solo</em> sistema de evidencia.</h2>
+      <p class="section-sub">XTask sustituye lo que hoy resuelves con FactorialHR, Spiff y Conga, y añade una capa de auditoría que ninguno trae nativa.</p>
+    </div>
+
+    <div class="features stagger">
+      <div class="feature feature-1">
+        <p class="feature-mark">primaria</p>
+        <h3>Cada respuesta es citable, o no se entrega.</h3>
+        <p>
+          El motor RAG busca en el corpus del tenant, recupera los fragmentos relevantes y los entrega al modelo de lenguaje junto con la pregunta. Si el corpus no contiene la respuesta, el asistente lo dice. Si la contiene, devuelve la cita marginal con sección y fecha de ingestión.
+        </p>
+        <div class="feature-detail">
+          <strong>Implementación</strong> · pgvector sobre PostgreSQL 15, embeddings con OpenAI text-embedding-3-small (fallback determinístico local), distancia coseno filtrada por <code>tenant_id</code> en cada query.
+        </div>
+      </div>
+      <div class="feature">
+        <p class="feature-mark">aislamiento</p>
+        <h3>Corpus aislado por cliente.</h3>
+        <p>
+          Cada tenant tiene su propio espacio de vectores y datos. El JWT lleva el <code>tenant_id</code> y todos los repositorios lo aplican forzado. La fuga es estructuralmente imposible, no es una promesa contractual.
+        </p>
+      </div>
+      <div class="feature">
+        <p class="feature-mark">compensación</p>
+        <h3>OKR que se cascadea solo.</h3>
+        <p>
+          KPI con mediciones ingeridas desde GitHub, CRM u hojas externas. Cuando un objetivo de equipo se cumple, el OKR del manager se recalcula y la comisión del empleado se calcula sin intervención.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── how it works ───────── -->
+<section id="funciona" class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Tres pasos. <em>Cero</em> ingenieros de por medio.</h2>
+      <p class="section-sub">El equipo de operaciones lo opera de principio a fin. El equipo técnico solo aparece la primera vez para conectar la fuente de documentos.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <p class="step-label">Primero</p>
+        <div class="step-body">
+          <h3>Conecta tu corpus.</h3>
+          <p>Sube manuales, políticas y plantillas, o conecta Google Drive y deja que el motor sincronice. El indexado tarda minutos y se actualiza al día siguiente con cambios automáticos.</p>
+        </div>
+      </div>
+      <div class="step">
+        <p class="step-label">Después</p>
+        <div class="step-body">
+          <h3>Tu equipo pregunta en lenguaje natural.</h3>
+          <p>Desde Slack, móvil o el portal. El copiloto entiende español neutro, catalán y portugués, y responde con citas a la sección exacta de tus documentos.</p>
+        </div>
+      </div>
+      <div class="step">
+        <p class="step-label">Finalmente</p>
+        <div class="step-body">
+          <h3>Genera documentos personalizados con trazabilidad.</h3>
+          <p>Contratos, certificados y cartas se generan combinando plantillas con datos del empleado. Cada documento conserva las fuentes que lo respaldan para una auditoría futura.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── trust ───────── -->
+<section class="trust" aria-label="Mercados objetivo">
+  <div class="container">
+    <div class="trust-row">
+      <p class="trust-label">Diseñado para empresas en</p>
+      <div class="trust-list" aria-hidden="false">
+        <span>Andorra</span>
+        <span>España</span>
+        <span>Colombia</span>
+        <span>México</span>
+        <span>Portugal</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── pricing ───────── -->
+<section id="precios" class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Cobramos por <em>resultado</em>, no por asiento.</h2>
+      <p class="section-sub">Sin contratos anuales escondidos, sin sorpresas en factura. Tres planes con upgrade transparente y precio publicado.</p>
+    </div>
+
+    <div class="pricing stagger">
+      <div class="tier">
+        <div class="tier-spacer" aria-hidden="true"></div>
+        <p class="tier-name">Startup</p>
+        <div class="tier-price"><span class="num">€199</span><span class="per">/mes</span></div>
+        <p class="tier-desc">Para equipos de hasta 50 empleados que arrancan con compliance basado en IA.</p>
+        <a href="#cta" class="btn btn-outline">Empezar el piloto</a>
+        <ul class="tier-list">
+          <li>Hasta 50 empleados activos</li>
+          <li>10 GB de corpus por tenant</li>
+          <li>500 consultas al copiloto cada mes</li>
+          <li>SSO con Google Workspace</li>
+          <li>Soporte por correo, 48 horas</li>
+        </ul>
+      </div>
+
+      <div class="tier tier-featured">
+        <p class="tier-rec">Recomendado para Q2</p>
+        <p class="tier-name">Growth</p>
+        <div class="tier-price"><span class="num">€599</span><span class="per">/mes</span></div>
+        <p class="tier-desc">Para empresas de hasta 500 empleados que escalan compensación variable y generación documental.</p>
+        <a href="#cta" class="btn btn-primary">Empezar el piloto <span class="arrow">→</span></a>
+        <ul class="tier-list">
+          <li>Hasta 500 empleados activos</li>
+          <li>100 GB de corpus por tenant</li>
+          <li>Consultas al copiloto ilimitadas</li>
+          <li>SSO SAML, Azure AD, Okta</li>
+          <li>Generación documental con RAG</li>
+          <li>Slack y soporte prioritario</li>
+        </ul>
+      </div>
+
+      <div class="tier">
+        <div class="tier-spacer" aria-hidden="true"></div>
+        <p class="tier-name">Enterprise</p>
+        <div class="tier-price"><span class="num">A medida</span></div>
+        <p class="tier-desc">Para organizaciones con requisitos de auditoría, datos sensibles o despliegue on-premise.</p>
+        <a href="#cta" class="btn btn-outline">Hablar con ventas</a>
+        <ul class="tier-list">
+          <li>Empleados y corpus ilimitados</li>
+          <li>Modelo dedicado u on-premise</li>
+          <li>DPA, GDPR, Habeas Data, LOPD</li>
+          <li>Auditoría SOC 2 incluida</li>
+          <li>Customer success dedicado</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── final CTA ───────── -->
+<section id="cta" class="cta-section">
+  <div class="container">
+    <div class="cta-inner">
+      <h2>¿Listo para que tu IA <em>cite</em> sus fuentes?</h2>
+      <p>Veinte minutos con nuestro equipo. Te enseñamos XTask cargado con tus propias políticas y dejamos un piloto activo de 30 días con tu corpus real.</p>
+      <div class="cta-row centered">
+        <a href="mailto:hola@xtask.io" class="btn btn-primary btn-lg">Solicitar demo <span class="arrow">→</span></a>
+        <a href="#docs" class="btn btn-outline btn-lg">Leer la documentación</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── footer ───────── -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="logo">
+          <span class="logo-mark">X</span>
+          <span>XTask</span>
+        </div>
+        <p>Plataforma empresarial con motor de IA nativo. Construida en Andorra, pensada para Iberoamérica.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Producto</h4>
+        <ul>
+          <li><a href="#producto">Características</a></li>
+          <li><a href="#funciona">Cómo funciona</a></li>
+          <li><a href="#precios">Precios</a></li>
+          <li><a href="#changelog">Changelog</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#sobre">Sobre XTask</a></li>
+          <li><a href="#carreras">Trabaja con nosotros</a></li>
+          <li><a href="mailto:hola@xtask.io">Contacto</a></li>
+          <li><a href="#prensa">Prensa</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Recursos</h4>
+        <ul>
+          <li><a href="#docs">Documentación</a></li>
+          <li><a href="#api">API pública</a></li>
+          <li><a href="#status">Estado del servicio</a></li>
+          <li><a href="#seguridad">Seguridad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 XTask · Andorra la Vella</span>
+      <div class="foot-bottom-links">
+        <a href="#privacidad">Privacidad</a>
+        <a href="#terminos">Términos</a>
+        <a href="#dpa">DPA</a>
+        <a href="#cookies">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 8);
+  }, { passive: true });
+
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        const children = e.target.children;
+        for (let i = 0; i < children.length; i++) {
+          children[i].style.transitionDelay = (i * 60) + 'ms';
+        }
+        io.unobserve(e.target);
+      }
+    }
+  }, { threshold: 0.18, rootMargin: '0px 0px -10% 0px' });
+  document.querySelectorAll('.stagger').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

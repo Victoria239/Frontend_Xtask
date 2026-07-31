@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Dashboard A — Editorial briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505; --bg2: #0B0B0B; --surface: #131316; --surface2: #1B1B1F;
+    --rule: #1F1F23; --rule2: #2C2C32; --ink: #F5F4F1; --text2: #A6A29C;
+    --text3: #6E6A65; --text4: #443F39;
+    --accent: #FF5A2C; --accent2: #FFB593; --green: #6FAB85; --red: #E56A5D;
+    --sans: 'Geist', sans-serif; --mono: 'Geist Mono', monospace;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+  .app { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+
+  /* ── Sidebar ────────────────────────────────────────────── */
+  .side { background: var(--bg2); border-right: 1px solid var(--rule); padding: 24px 14px; display: flex; flex-direction: column; gap: 24px; }
+  .side .brand { display: flex; align-items: center; gap: 10px; padding: 0 10px; }
+  .logo-mark { width: 24px; height: 24px; background: var(--accent); border-radius: 6px; display: grid; place-items: center; color: var(--bg); font-size: 13px; font-weight: 600; letter-spacing: -0.04em; }
+  .side .brand-name { font-size: 15.5px; font-weight: 500; letter-spacing: -0.012em; }
+  .side .section-h { font-family: var(--mono); font-size: 10.5px; color: var(--text4); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 10px; margin-bottom: 6px; }
+  .side .nav { display: flex; flex-direction: column; gap: 1px; }
+  .side a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; color: var(--text2); border-radius: 6px; font-size: 13.5px; text-decoration: none; transition: background 160ms var(--ease), color 160ms var(--ease); }
+  .side a:hover { background: var(--surface); color: var(--ink); }
+  .side a.active { background: var(--surface2); color: var(--ink); }
+  .side a.active .ic { color: var(--accent); }
+  .side .ic { width: 14px; height: 14px; color: var(--text3); }
+  .side .badge { margin-left: auto; font-family: var(--mono); font-size: 10px; padding: 1px 6px; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; color: var(--text2); }
+  .side .badge.alert { color: var(--red); border-color: rgba(229,106,93,0.3); background: rgba(229,106,93,0.08); }
+  .side-foot { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--rule); display: flex; align-items: center; gap: 10px; padding-left: 10px; }
+  .side-foot .av { width: 28px; height: 28px; border-radius: 50%; background: var(--surface2); display: grid; place-items: center; font-family: var(--mono); font-size: 11px; color: var(--text2); border: 1px solid var(--rule2); }
+  .side-foot .who { display: flex; flex-direction: column; }
+  .side-foot .who .n { font-size: 13px; color: var(--ink); font-weight: 500; }
+  .side-foot .who .t { font-family: var(--mono); font-size: 10.5px; color: var(--text3); }
+
+  /* ── Main ───────────────────────────────────────────────── */
+  .main { padding: 32px 40px; }
+  .topline { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 1px solid var(--rule); margin-bottom: 36px; }
+  .crumbs { font-family: var(--mono); font-size: 12px; color: var(--text3); display: flex; gap: 10px; align-items: center; }
+  .crumbs .sep { color: var(--text4); }
+  .crumbs .cur { color: var(--ink); }
+  .top-right { display: flex; gap: 12px; align-items: center; }
+  .search { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 7px 12px; display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11.5px; color: var(--text3); min-width: 240px; }
+  .search kbd { margin-left: auto; padding: 1px 6px; border: 1px solid var(--rule2); border-radius: 3px; font-size: 10px; }
+
+  /* ── Hero narrative ─────────────────────────────────────── */
+  .hero { margin-bottom: 48px; }
+  .date { font-family: var(--mono); font-size: 11.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; display: inline-flex; align-items: center; gap: 10px; }
+  .date::before { content: ""; width: 24px; height: 1px; background: var(--accent); }
+  h1.greet { font-size: clamp(32px, 3.5vw, 44px); font-weight: 500; letter-spacing: -0.025em; line-height: 1.1; margin: 0 0 24px; max-width: 720px; text-wrap: balance; }
+  h1.greet em { font-style: italic; font-weight: 500; color: var(--accent2); }
+
+  .narrative { font-size: 17px; line-height: 1.65; color: var(--text2); max-width: 64ch; margin: 0; letter-spacing: -0.005em; }
+  .narrative strong { color: var(--ink); font-weight: 500; }
+  .narrative .pos { color: var(--green); font-weight: 500; }
+  .narrative .neg { color: var(--red); font-weight: 500; }
+  .narrative a { color: var(--accent2); text-decoration: none; border-bottom: 1px solid rgba(255,181,147,0.3); padding-bottom: 1px; }
+  .narrative a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ── Charts row ─────────────────────────────────────────── */
+  .charts { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; margin-bottom: 40px; }
+  .panel { background: var(--bg2); border: 1px solid var(--rule); border-radius: 12px; padding: 24px 28px; }
+  .panel-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
+  .panel-h { font-size: 15.5px; font-weight: 500; letter-spacing: -0.01em; margin: 0; }
+  .panel-meta { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+  .panel-meta .delta { color: var(--green); }
+
+  .chart-area { height: 220px; position: relative; padding: 16px 0; }
+  .bars { display: flex; align-items: flex-end; gap: 4px; height: 100%; }
+  .bar { flex: 1; background: var(--rule2); border-radius: 2px 2px 0 0; position: relative; transition: opacity 200ms var(--ease); }
+  .bar.hi { background: var(--accent); }
+  .bar:hover { opacity: 0.7; }
+
+  .axis-l { display: flex; justify-content: space-between; margin-top: 10px; font-family: var(--mono); font-size: 10.5px; color: var(--text4); padding-bottom: 4px; }
+
+  /* Donut */
+  .donut { display: flex; align-items: center; gap: 24px; }
+  .donut svg { flex-shrink: 0; }
+  .donut-list { flex: 1; }
+  .donut-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 13.5px; }
+  .donut-list li:last-child { border-bottom: none; }
+  .donut-list .lbl { display: inline-flex; align-items: center; gap: 8px; color: var(--text2); }
+  .donut-list .lbl::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--c, var(--rule2)); }
+  .donut-list .v { font-family: var(--mono); color: var(--ink); font-weight: 500; }
+
+  /* ── Activity feed ──────────────────────────────────────── */
+  .activity { display: grid; grid-template-columns: 1fr 280px; gap: 28px; }
+  .feed { display: flex; flex-direction: column; gap: 0; }
+  .feed-h { font-size: 14px; color: var(--text3); margin: 0 0 16px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; }
+  .feed-item { display: grid; grid-template-columns: 80px 1fr auto; gap: 18px; padding: 14px 0; border-top: 1px solid var(--rule); align-items: start; }
+  .feed-item:last-of-type { border-bottom: 1px solid var(--rule); }
+  .feed-time { font-family: var(--mono); font-size: 11px; color: var(--text3); padding-top: 3px; }
+  .feed-msg { font-size: 14px; line-height: 1.55; color: var(--text2); }
+  .feed-msg strong { color: var(--ink); font-weight: 500; }
+  .feed-tag { font-family: var(--mono); font-size: 10.5px; color: var(--text3); padding: 2px 7px; border: 1px solid var(--rule); border-radius: 4px; flex-shrink: 0; align-self: start; margin-top: 2px; }
+  .feed-tag.pos { color: var(--green); border-color: rgba(111,171,133,0.3); }
+
+  .quick { background: var(--bg2); border: 1px solid var(--rule); border-radius: 12px; padding: 22px 24px; height: fit-content; }
+  .quick h4 { font-size: 13.5px; font-weight: 500; margin: 0 0 14px; }
+  .quick-item { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; color: var(--text2); border-bottom: 1px dashed var(--rule); }
+  .quick-item:last-child { border-bottom: none; }
+  .quick-item .v { font-family: var(--mono); color: var(--ink); }
+</style></head>
+<body>
+<div class="app">
+  <!-- ── Sidebar ─────────────────────────────────────────── -->
+  <aside class="side">
+    <div class="brand">
+      <span class="logo-mark">X</span>
+      <span class="brand-name">XTask</span>
+    </div>
+    <div>
+      <p class="section-h">workspace</p>
+      <div class="nav">
+        <a href="#" class="active"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Resumen</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Proyectos<span class="badge">12</span></a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Empleados<span class="badge">347</span></a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Nóminas</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>Finanzas</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>KPIs y OKRs<span class="badge alert">3</span></a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Habilidades</a>
+      </div>
+    </div>
+    <div>
+      <p class="section-h">IA</p>
+      <div class="nav">
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.4 8.4 0 013.8-.9h.5a8.5 8.5 0 018 8v.5z"/></svg>Asistente</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Documentos<span class="badge">47</span></a>
+      </div>
+    </div>
+    <div class="side-foot">
+      <div class="av">AX</div>
+      <div class="who">
+        <span class="n">Admin XTask</span>
+        <span class="t">andorra-acme</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main ─────────────────────────────────────────────── -->
+  <main class="main">
+    <div class="topline">
+      <div class="crumbs"><span>workspace</span><span class="sep">/</span><span class="cur">Resumen</span></div>
+      <div class="top-right">
+        <div class="search">🔍 Buscar empleados, contratos, métricas… <kbd>⌘K</kbd></div>
+      </div>
+    </div>
+
+    <div class="hero">
+      <p class="date">lunes · 15 de junio 2026 · semana 24</p>
+      <h1 class="greet">Buenos días, Manuel. Hoy es <em>buen día</em> para el equipo.</h1>
+      <p class="narrative">
+        Esta semana, el equipo de andorra-acme cerró <strong>12 nuevos contratos</strong> generados con citas del corpus
+        — <span class="pos">+24%</span> respecto a la semana anterior. Los OKRs de <strong>tecnología</strong> y <strong>operaciones</strong>
+        van <span class="pos">on-track</span>; el de <strong>ventas LATAM</strong> entró en <span class="neg">at-risk</span> hace 3 días y
+        <a href="#">aún no tiene plan de mitigación</a>. El copiloto respondió <strong>1.247 consultas</strong> con un promedio
+        de <strong>2 fuentes citadas</strong> por respuesta. Tienes <strong>3 aprobaciones pendientes</strong> en compensación.
+      </p>
+    </div>
+
+    <div class="charts">
+      <div class="panel">
+        <div class="panel-head">
+          <h3 class="panel-h">Consultas al copiloto · últimas 12 semanas</h3>
+          <span class="panel-meta">total <span style="color:var(--ink)">14,832</span> · <span class="delta">+18% vs trimestre</span></span>
+        </div>
+        <div class="chart-area">
+          <div class="bars">
+            <div class="bar" style="height:32%"></div>
+            <div class="bar" style="height:48%"></div>
+            <div class="bar" style="height:42%"></div>
+            <div class="bar" style="height:58%"></div>
+            <div class="bar" style="height:54%"></div>
+            <div class="bar" style="height:68%"></div>
+            <div class="bar" style="height:62%"></div>
+            <div class="bar" style="height:74%"></div>
+            <div class="bar" style="height:71%"></div>
+            <div class="bar" style="height:82%"></div>
+            <div class="bar hi" style="height:88%"></div>
+            <div class="bar hi" style="height:94%"></div>
+          </div>
+        </div>
+        <div class="axis-l"><span>S13</span><span>S15</span><span>S17</span><span>S19</span><span>S21</span><span>S23</span><span>S24</span></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h3 class="panel-h">Mix de OKRs</h3>
+          <span class="panel-meta">trimestre Q2</span>
+        </div>
+        <div class="donut">
+          <svg width="120" height="120" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#1F1F23" stroke-width="6"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#6FAB85" stroke-width="6" stroke-dasharray="51 94" stroke-dashoffset="0" transform="rotate(-90 18 18)"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#FF5A2C" stroke-width="6" stroke-dasharray="28 94" stroke-dashoffset="-51" transform="rotate(-90 18 18)"/>
+            <circle cx="18" cy="18" r="15" fill="none" stroke="#E56A5D" stroke-width="6" stroke-dasharray="15 94" stroke-dashoffset="-79" transform="rotate(-90 18 18)"/>
+            <text x="18" y="19" text-anchor="middle" font-family="Geist" font-size="6" fill="#F5F4F1" font-weight="500">94</text>
+            <text x="18" y="23" text-anchor="middle" font-family="Geist Mono" font-size="2.8" fill="#6E6A65">OKR</text>
+          </svg>
+          <ul class="donut-list" style="list-style:none; padding:0; margin:0;">
+            <li><span class="lbl" style="--c:#6FAB85">On-track</span><span class="v">54%</span></li>
+            <li><span class="lbl" style="--c:#FF5A2C">In progress</span><span class="v">30%</span></li>
+            <li><span class="lbl" style="--c:#E56A5D">At-risk</span><span class="v">16%</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity">
+      <div class="feed">
+        <p class="feed-h">Actividad reciente · hoy</p>
+        <div class="feed-item">
+          <span class="feed-time">09:42</span>
+          <p class="feed-msg"><strong>Felipe Cortés</strong> generó el contrato de <strong>Ana García</strong> con 4 citas del corpus.</p>
+          <span class="feed-tag pos">+ contrato</span>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">09:18</span>
+          <p class="feed-msg"><strong>OKR "Lanzamientos Q2"</strong> alcanzó el 108% del target. Bono €1.840 listo para aprobar.</p>
+          <span class="feed-tag pos">+ achieved</span>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">08:55</span>
+          <p class="feed-msg"><strong>OKR "Ventas LATAM"</strong> entró en at-risk. Falta 18 días, cumplimiento 41%.</p>
+          <span class="feed-tag">⚠ alerta</span>
+        </div>
+        <div class="feed-item">
+          <span class="feed-time">08:34</span>
+          <p class="feed-msg">El corpus ingestó <strong>3 documentos nuevos</strong> desde Google Drive: política de viajes, manual onboarding 2026, anexo seguro de salud.</p>
+          <span class="feed-tag">+ corpus</span>
+        </div>
+      </div>
+
+      <aside class="quick">
+        <h4>Tus pendientes</h4>
+        <div class="quick-item"><span>Aprobar bonos Q2</span><span class="v">3</span></div>
+        <div class="quick-item"><span>Revisar contratos</span><span class="v">2</span></div>
+        <div class="quick-item"><span>OKR at-risk</span><span class="v">1</span></div>
+        <div class="quick-item"><span>Onboarding pendiente</span><span class="v">1</span></div>
+      </aside>
+    </div>
+  </main>
+</div>
+</body></html>

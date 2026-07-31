@@ -1,0 +1,190 @@
+{
+  "app": {
+    "name": "XTask",
+    "tagline": "Plataforma SaaS multi-tenant per a persones, projectes i compensació"
+  },
+  "nav": {
+    "inbox": "Safata",
+    "mySpace": "El meu espai",
+    "executive": "Executiu",
+    "assistant": "Assistent",
+    "vault": "Volta",
+    "groups": {
+      "people": "Persones",
+      "work": "Treball",
+      "finance": "Finances",
+      "documents": "Documents",
+      "system": "Sistema"
+    },
+    "items": {
+      "employees": "Empleats",
+      "orgChart": "Organigrama",
+      "onboarding": "Incorporació",
+      "leaves": "Absències",
+      "recruiting": "Selecció",
+      "skills": "Habilitats",
+      "retention": "Retenció",
+      "reviews": "Avaluacions 360°",
+      "projects": "Projectes",
+      "okrs": "OKRs",
+      "kpis": "KPIs",
+      "forecast": "Previsions",
+      "payroll": "Nòmines",
+      "finance": "Finances",
+      "plans": "Comissions",
+      "payouts": "Pagaments",
+      "benefits": "Beneficis",
+      "approvals": "Aprovacions",
+      "compAnalytics": "Anàlisi de compensació",
+      "documents": "Documents",
+      "contracts": "Contractes",
+      "docgen": "Generador",
+      "admin": "Administració",
+      "settings": "Configuració",
+      "peopleAnalytics": "People Analytics"
+    }
+  },
+  "common": {
+    "loading": "Carregant…",
+    "save": "Desar",
+    "cancel": "Cancel·lar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Cercar",
+    "filter": "Filtrar",
+    "all": "Tots",
+    "active": "Actiu",
+    "inactive": "Inactiu",
+    "yes": "Sí",
+    "no": "No",
+    "actions": "Accions",
+    "status": "Estat",
+    "name": "Nom",
+    "date": "Data",
+    "total": "Total",
+    "error": "Error",
+    "success": "Èxit",
+    "warning": "Avís",
+    "info": "Informació",
+    "logout": "Tancar sessió",
+    "profile": "Perfil",
+    "language": "Idioma",
+    "noResults": "Sense resultats",
+    "submit": "Enviar",
+    "close": "Tancar",
+    "back": "Tornar",
+    "next": "Següent",
+    "previous": "Anterior"
+  },
+  "login": {
+    "title": "Iniciar sessió",
+    "subtitle": "Accedeix al teu compte XTask",
+    "email": "Correu electrònic",
+    "password": "Contrasenya",
+    "rememberMe": "Recorda'm",
+    "forgotPassword": "Has oblidat la contrasenya?",
+    "loginButton": "Entrar",
+    "loginWithKeycloak": "Entrar amb SSO"
+  },
+  "dashboard": {
+    "welcome": "Hola",
+    "myReports": "Subordinats directes",
+    "myContracts": "Els meus contractes",
+    "myLeaves": "Les meves absències",
+    "myOKRs": "Els meus OKRs",
+    "pendingReviews": "Avaluacions pendents",
+    "suggestedBenefits": "Beneficis suggerits",
+    "requestLeave": "Sol·licitar absència",
+    "team": "El meu equip"
+  },
+  "bi": {
+    "title": "Tauler executiu",
+    "subtitle": "Mètriques nord d'XTask",
+    "arr": "ARR",
+    "headcount": "Plantilla",
+    "okrAvg": "OKR mitjà",
+    "pnl": "P&L anual",
+    "topClients": "Top clients",
+    "highRiskEmployees": "Empleats d'alt risc",
+    "headcountByTeam": "Plantilla per equip",
+    "financialBreakdown": "Desglossament financer",
+    "hiringTrend": "Tendència de plantilla",
+    "attritionRisk": "Risc de fuga"
+  },
+  "attrition": {
+    "title": "Risc de fuga de talent",
+    "subtitle": "Puntuació 0-100 per empleat",
+    "high": "Alt",
+    "medium": "Mitjà",
+    "low": "Baix",
+    "totalEmployees": "Total empleats",
+    "highRisk": "Risc alt",
+    "mediumRisk": "Risc mitjà",
+    "lowRisk": "Risc baix",
+    "topDrivers": "Factors principals",
+    "factorBreakdown": "Desglossament per factor"
+  },
+  "reviews": {
+    "title": "Avaluacions 360°",
+    "subtitle": "Cicles d'avaluació de desempenyo",
+    "pending": "Pendents",
+    "myReviews": "Les meves avaluacions",
+    "admin": "Administració",
+    "newCycle": "Nou cicle",
+    "cycleStatus": {
+      "open": "Obert",
+      "in_progress": "En curs",
+      "closed": "Tancat"
+    },
+    "roles": {
+      "self": "Auto-avaluació",
+      "manager": "Cap directe",
+      "peer": "Company",
+      "report": "Subordinat"
+    }
+  },
+  "comp": {
+    "title": "Anàlisi de Compensació",
+    "subtitle": "Bandes salarials i outliers",
+    "totalPayroll": "Massa salarial anual",
+    "avgSalary": "Salari mitjà",
+    "medianSalary": "Salari mitjà (mediana)",
+    "gapFactor": "Factor de bretxa",
+    "compaRatio": "Compa-ratio mitjana",
+    "bands": "Bandes salarials",
+    "outliers": "Outliers detectats",
+    "topEarners": "Top 5 sous més alts"
+  },
+  "assistant": {
+    "title": "Assistent IA",
+    "placeholder": "Pregunta'm el que necessitis…",
+    "send": "Enviar",
+    "sources": {
+      "vault": "Volta",
+      "docs": "Documents",
+      "db": "BD"
+    }
+  },
+  "notifications": {
+    "title": "Notificacions",
+    "markAllRead": "Marca-les totes com llegides",
+    "empty": "Sense notificacions",
+    "viewAll": "Veure totes"
+  },
+  "people": {
+    "title": "People Analytics",
+    "subtitle": "Intel·ligència de talent: 9-box, antiguitat, span of control i risc per segment.",
+    "headcount": "Plantilla",
+    "avgTenure": "Antiguitat mitjana",
+    "avgPerf": "Rendiment mitjà",
+    "managers": "Caps",
+    "nineBox": "Rendiment × Retenció",
+    "nineBoxHint": "Eix X: rendiment · Eix Y: retenció (invers del risc de fuga)",
+    "tenureDist": "Distribució d'antiguitat",
+    "bandSaturation": "Saturació de bandes",
+    "spanOfControl": "Span of control",
+    "segmentRisk": "Risc de fuga per segment",
+    "diversity": "Composició per departament"
+  }
+}

@@ -1,0 +1,57 @@
+/* Brand fonts — Xtask brandbook 2023.
+ *
+ * Gilroy: UI + body + headings
+ * Bermont Regular: display / titulares cortos
+ *
+ * Los archivos se esperan en /public/fonts/ — ver README ahí.
+ * Si los archivos no están, el navegador usa el fallback Inter.
+ * font-display: swap garantiza que el texto se renderiza enseguida.
+ */
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/Gilroy-Light.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/Gilroy-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/Gilroy-Medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/Gilroy-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Gilroy";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/Gilroy-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Bermont";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/Bermont-Regular.woff2") format("woff2");
+}

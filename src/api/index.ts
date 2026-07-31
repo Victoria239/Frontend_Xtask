@@ -1,0 +1,33 @@
+/* Barrel export de todos los servicios API */
+
+export * as authApi from "./auth";
+export * as projectsApi from "./projects";
+export * as employeesApi from "./employees";
+export * as payrollApi from "./payroll";
+export * as financeApi from "./finance";
+export * as kpisApi from "./kpis";
+export * as skillsApi from "./skills";
+export * as dashboardApi from "./dashboard";
+export * as ragApi from "./rag";
+export * as aiApi from "./ai";
+export * as notificationsApi from "./notifications";
+export * as onboardingApi from "./onboarding";
+export * as docgenApi from "./docgen";
+export * as okrsApi from "./okrs";
+export * as contractsApi from "./contracts";
+export * as plansApi from "./plans";
+export * as leavesApi from "./leaves";
+export * as atsApi from "./ats";
+export * as activitiesApi from "./activities";
+export * as payoutsApi from "./payouts";
+export * as approvalsApi from "./approvals";
+export * as predictionsApi from "./predictions";
+export * as emailPrefsApi from "./email_prefs";
+export * as tenantsAdminApi from "./tenants_admin";
+export * as attritionApi from "./attrition";
+export * as biApi from "./bi";
+export * as reviewsApi from "./reviews";
+export * as compApi from "./comp";
+export * as peopleApi from "./people";
+export * as meApi from "./me";
+export { default as apiClient } from "./client";

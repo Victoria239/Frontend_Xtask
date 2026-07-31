@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Dashboard C — Inbox-first</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505; --bg2: #0B0B0B; --surface: #131316; --surface2: #1B1B1F;
+    --rule: #1F1F23; --rule2: #2C2C32; --ink: #F5F4F1; --text2: #A6A29C;
+    --text3: #6E6A65; --text4: #443F39;
+    --accent: #FF5A2C; --accent2: #FFB593; --green: #6FAB85; --red: #E56A5D; --amber: #E0A04A;
+    --sans: 'Geist', sans-serif; --mono: 'Geist Mono', monospace;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+  .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+  /* ── Sidebar ────────────────────────────────────────────── */
+  .side { background: var(--bg2); border-right: 1px solid var(--rule); padding: 22px 14px; display: flex; flex-direction: column; gap: 22px; }
+  .side .brand { display: flex; align-items: center; gap: 10px; padding: 0 10px; font-size: 15.5px; font-weight: 500; letter-spacing: -0.012em; }
+  .logo-mark { width: 24px; height: 24px; background: var(--accent); border-radius: 6px; display: grid; place-items: center; color: var(--bg); font-size: 13px; font-weight: 600; letter-spacing: -0.04em; }
+  .compose { background: var(--ink); color: var(--bg); border: none; border-radius: 8px; padding: 10px 14px; font-family: inherit; font-size: 13.5px; font-weight: 500; letter-spacing: -0.005em; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 160ms var(--ease), transform 120ms var(--ease); }
+  .compose:hover { background: #E6E4DF; }
+  .compose:active { transform: scale(0.98); }
+  .compose .kbd { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: rgba(5,5,5,0.55); padding: 1px 6px; border: 1px solid rgba(5,5,5,0.2); border-radius: 3px; }
+  .side .nav { display: flex; flex-direction: column; gap: 1px; }
+  .side a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; color: var(--text2); border-radius: 6px; font-size: 13.5px; text-decoration: none; transition: background 160ms var(--ease), color 160ms var(--ease); }
+  .side a:hover { background: var(--surface); color: var(--ink); }
+  .side a.active { background: var(--surface2); color: var(--ink); }
+  .side a.active .ic { color: var(--accent); }
+  .side svg.ic { width: 14px; height: 14px; color: var(--text3); }
+  .side .badge { margin-left: auto; font-family: var(--mono); font-size: 10px; padding: 1px 6px; background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; color: var(--text2); }
+  .side .badge.alert { color: var(--red); border-color: rgba(229,106,93,0.3); background: rgba(229,106,93,0.08); }
+  .section-h { font-family: var(--mono); font-size: 10.5px; color: var(--text4); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 10px; margin-bottom: 6px; }
+  .side-foot { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--rule); display: flex; align-items: center; gap: 10px; padding-left: 10px; }
+  .side-foot .av { width: 28px; height: 28px; border-radius: 50%; background: var(--surface2); display: grid; place-items: center; font-family: var(--mono); font-size: 11px; color: var(--text2); border: 1px solid var(--rule2); }
+  .side-foot .n { font-size: 13px; color: var(--ink); font-weight: 500; line-height: 1.2; }
+  .side-foot .t { font-family: var(--mono); font-size: 10.5px; color: var(--text3); }
+
+  /* ── Main ───────────────────────────────────────────────── */
+  .main { padding: 28px 36px; }
+  .pageh { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 18px; border-bottom: 1px solid var(--rule); margin-bottom: 32px; }
+  .pageh .left h1 { font-size: 26px; font-weight: 500; letter-spacing: -0.022em; margin: 0 0 4px; }
+  .pageh .left h1 em { color: var(--accent2); font-style: italic; font-weight: 500; }
+  .pageh .left p { font-size: 13.5px; color: var(--text3); margin: 0; }
+  .pageh .filters { display: flex; gap: 6px; }
+  .filter { background: transparent; border: 1px solid var(--rule); color: var(--text2); font-family: inherit; font-size: 12.5px; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 160ms var(--ease); }
+  .filter:hover { border-color: var(--rule2); color: var(--ink); }
+  .filter.active { background: var(--surface); color: var(--ink); border-color: var(--rule2); }
+  .filter .count { font-family: var(--mono); font-size: 10.5px; padding: 1px 6px; background: var(--surface2); border-radius: 3px; }
+  .filter.active .count { background: var(--accent); color: var(--bg); }
+
+  /* ── Inbox list — primary content ───────────────────────── */
+  .inbox { background: var(--bg2); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+  .item { display: grid; grid-template-columns: auto 100px 1fr auto auto; gap: 18px; padding: 16px 22px; border-bottom: 1px solid var(--rule); align-items: center; cursor: pointer; transition: background 160ms var(--ease); }
+  .item:last-child { border-bottom: none; }
+  .item:hover { background: var(--surface); }
+  .item.unread { background: rgba(255,90,44,0.03); border-left: 2px solid var(--accent); padding-left: 20px; }
+  .item.unread:hover { background: rgba(255,90,44,0.06); }
+
+  .marker { width: 6px; height: 6px; border-radius: 50%; background: transparent; }
+  .item.unread .marker { background: var(--accent); }
+
+  .item-type { font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border: 1px solid var(--rule); border-radius: 4px; text-align: center; flex-shrink: 0; }
+  .item-type.urgent { color: var(--red); border-color: rgba(229,106,93,0.4); background: rgba(229,106,93,0.06); }
+  .item-type.action { color: var(--amber); border-color: rgba(224,160,74,0.4); background: rgba(224,160,74,0.06); }
+  .item-type.info   { color: var(--text2); }
+  .item-type.event  { color: var(--accent2); border-color: rgba(255,181,147,0.3); }
+
+  .item-body .title { font-size: 14.5px; color: var(--ink); font-weight: 500; letter-spacing: -0.008em; margin: 0 0 4px; }
+  .item.unread .item-body .title { color: var(--ink); }
+  .item-body .desc { font-size: 13px; color: var(--text2); margin: 0; line-height: 1.5; }
+  .item-body .desc strong { color: var(--ink); font-weight: 500; }
+  .item-body .meta { font-family: var(--mono); font-size: 10.5px; color: var(--text3); margin-top: 6px; display: flex; gap: 14px; }
+
+  .item-actions { display: flex; gap: 6px; }
+  .act-btn { background: transparent; border: 1px solid var(--rule); color: var(--text2); border-radius: 6px; padding: 5px 12px; font-family: inherit; font-size: 12.5px; font-weight: 500; cursor: pointer; transition: all 160ms var(--ease); }
+  .act-btn:hover { border-color: var(--rule2); background: var(--surface); color: var(--ink); }
+  .act-btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .act-btn.primary:hover { background: #E6E4DF; }
+  .act-btn.danger { color: var(--red); border-color: rgba(229,106,93,0.3); }
+  .act-btn.danger:hover { background: rgba(229,106,93,0.1); }
+  .item-time { font-family: var(--mono); font-size: 11px; color: var(--text3); white-space: nowrap; }
+
+  /* ── Summary strip at bottom ────────────────────────────── */
+  .strip { margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--rule); display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
+  .strip > div { padding: 0 20px; border-left: 1px solid var(--rule); }
+  .strip > div:first-child { padding-left: 0; border-left: none; }
+  .strip .l { font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 6px; }
+  .strip .v { font-size: 22px; font-weight: 500; letter-spacing: -0.022em; line-height: 1; }
+  .strip .v em { color: var(--accent2); font-style: normal; }
+  .strip .d { font-family: var(--mono); font-size: 10.5px; color: var(--text3); margin-top: 4px; }
+  .strip .d.up { color: var(--green); }
+</style></head>
+<body>
+<div class="app">
+  <!-- ── Sidebar ─────────────────────────────────────────── -->
+  <aside class="side">
+    <div class="brand">
+      <span class="logo-mark">X</span>
+      <span>XTask</span>
+    </div>
+
+    <button class="compose">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Nueva acción
+      <span class="kbd">N</span>
+    </button>
+
+    <div>
+      <p class="section-h">prioridad</p>
+      <div class="nav">
+        <a href="#" class="active"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Inbox<span class="badge alert">5</span></a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Esperando aprobación<span class="badge">3</span></a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Asignado a ti<span class="badge">2</span></a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Snoozed<span class="badge">4</span></a>
+      </div>
+    </div>
+
+    <div>
+      <p class="section-h">módulos</p>
+      <div class="nav">
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Resumen</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Proyectos</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Empleados</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Nóminas</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>Finanzas</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>KPIs y OKRs</a>
+      </div>
+    </div>
+
+    <div class="side-foot">
+      <div class="av">AX</div>
+      <div>
+        <div class="n">Admin XTask</div>
+        <div class="t">andorra-acme</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main ─────────────────────────────────────────────── -->
+  <main class="main">
+    <div class="pageh">
+      <div class="left">
+        <h1>Buenos días, Manuel. Tienes <em>5 cosas</em> hoy.</h1>
+        <p>Ordenadas por urgencia. Las que requieren acción inmediata aparecen primero.</p>
+      </div>
+      <div class="filters">
+        <button class="filter active">Todas <span class="count">5</span></button>
+        <button class="filter">Urgentes <span class="count">2</span></button>
+        <button class="filter">Aprobaciones <span class="count">3</span></button>
+        <button class="filter">Informativas <span class="count">8</span></button>
+      </div>
+    </div>
+
+    <!-- Inbox list -->
+    <div class="inbox">
+      <div class="item unread">
+        <span class="marker"></span>
+        <span class="item-type urgent">urgente</span>
+        <div class="item-body">
+          <p class="title">El OKR "Expansión Portugal" entró en at-risk</p>
+          <p class="desc">Cumplimiento <strong>41%</strong> · faltan 33 días para vencer. <strong>Jairo C.</strong> aún no asignó plan de mitigación. La IA sugiere reasignar el budget de marketing Q3 al equipo de outbound.</p>
+          <p class="meta"><span>OKR-2026-Q2-08</span><span>fuente · 3 informes financieros</span></p>
+        </div>
+        <div class="item-actions">
+          <button class="act-btn">Snooze</button>
+          <button class="act-btn primary">Asignar plan →</button>
+        </div>
+        <span class="item-time">hace 3h</span>
+      </div>
+
+      <div class="item unread">
+        <span class="marker"></span>
+        <span class="item-type action">aprobar</span>
+        <div class="item-body">
+          <p class="title">Bono Q2 listo para liquidación · Marco Salazar</p>
+          <p class="desc">OKR "Lanzamientos Q2" cerrado al <strong>108%</strong>. Bono calculado: <strong>€1.840</strong> según plan de compensación 2026 §4.2 (peso 1.5 + multiplicador sobre-cumplimiento). Requiere tu aprobación antes de pasar a nómina.</p>
+          <p class="meta"><span>PLAN-2026-V3 · §4.2</span><span>generado automáticamente</span></p>
+        </div>
+        <div class="item-actions">
+          <button class="act-btn">Revisar</button>
+          <button class="act-btn primary">Aprobar €1.840 →</button>
+        </div>
+        <span class="item-time">09:42</span>
+      </div>
+
+      <div class="item unread">
+        <span class="marker"></span>
+        <span class="item-type action">aprobar</span>
+        <div class="item-body">
+          <p class="title">3 contratos generados pendientes de firma</p>
+          <p class="desc">Generados por <strong>Felipe Cortés</strong> con plantilla "Tiempo indefinido" + corpus actualizado: <strong>Ana García</strong>, <strong>Lucía Vega</strong>, <strong>Pedro Mata</strong>. Todos con 4 citas verificadas del corpus.</p>
+          <p class="meta"><span>3 documentos · 12 citas totales</span><span>plantilla v2.1</span></p>
+        </div>
+        <div class="item-actions">
+          <button class="act-btn">Ver detalle</button>
+          <button class="act-btn primary">Firmar lote →</button>
+        </div>
+        <span class="item-time">09:18</span>
+      </div>
+
+      <div class="item">
+        <span class="marker"></span>
+        <span class="item-type event">corpus</span>
+        <div class="item-body">
+          <p class="title">El corpus ingestó 3 documentos nuevos desde Google Drive</p>
+          <p class="desc">Política de viajes 2026, Manual de onboarding actualizado, Anexo seguro de salud. <strong>47 fuentes nuevas</strong> disponibles para el copilot. La IA detectó <strong>2 conflictos</strong> con políticas anteriores que requieren tu revisión.</p>
+          <p class="meta"><span>ingest job · pid 8472</span><span>4.2 MB · 142 chunks</span></p>
+        </div>
+        <div class="item-actions">
+          <button class="act-btn">Ver conflictos</button>
+        </div>
+        <span class="item-time">08:34</span>
+      </div>
+
+      <div class="item">
+        <span class="marker"></span>
+        <span class="item-type info">info</span>
+        <div class="item-body">
+          <p class="title">Reporte semanal listo</p>
+          <p class="desc">Resumen de la semana 24: <strong>+12 contratos</strong> firmados, <strong>+24%</strong> consultas al copilot, <strong>1 OKR</strong> alcanzado. Tu equipo está <strong>+18%</strong> sobre la línea base del trimestre.</p>
+          <p class="meta"><span>generado por la IA · 47 citas</span></p>
+        </div>
+        <div class="item-actions">
+          <button class="act-btn">Leer →</button>
+        </div>
+        <span class="item-time">ayer</span>
+      </div>
+    </div>
+
+    <!-- Summary strip — métricas secundarias -->
+    <div class="strip">
+      <div><p class="l">empleados</p><p class="v">347</p><p class="d up">+12 este mes</p></div>
+      <div><p class="l">consultas IA</p><p class="v">1.247</p><p class="d up">+24% sem.</p></div>
+      <div><p class="l">contratos Q2</p><p class="v">38</p><p class="d up">+12 esta semana</p></div>
+      <div><p class="l">OKRs on-track</p><p class="v">54<em>%</em></p><p class="d up">+8% mes</p></div>
+      <div><p class="l">nómina junio</p><p class="v">€428k</p><p class="d">+4.2% vs anterior</p></div>
+    </div>
+  </main>
+</div>
+</body></html>

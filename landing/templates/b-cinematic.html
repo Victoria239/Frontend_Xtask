@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>B — Cinematic chapter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505;
+    --bg2: #0E0E0E;
+    --surface: #1A1A1A;
+    --ink: #FAFAF8;
+    --text2: #A5A29B;
+    --text3: #65615B;
+    --accent: #FF5A2C;     /* electric sienna — full saturation */
+    --accent2: #FFB593;
+    --serif: 'Geist', sans-serif;
+    --mono: 'Geist Mono', monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--serif); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+  /* ── ambient canvas: drifting document fragments ─────────────── */
+  .ambient { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .ambient .frag { position: absolute; font-family: var(--mono); font-size: 11px; color: var(--accent); opacity: 0.12; white-space: nowrap; transform: rotate(var(--rot, 0deg)); }
+  .ambient .frag::before { content: "[" attr(data-cite) "] "; color: var(--accent2); }
+
+  /* ── nav: ultra minimal floating ─────────────────────────────── */
+  nav { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); display: flex; gap: 1px; padding: 6px; background: rgba(20,20,20,0.7); backdrop-filter: blur(20px); border: 1px solid #2a2a2a; border-radius: 999px; z-index: 100; }
+  nav a { padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text2); text-decoration: none; border-radius: 999px; transition: all 200ms cubic-bezier(0.23,1,0.32,1); }
+  nav a:hover { color: var(--ink); background: var(--surface); }
+  nav a.cta { color: var(--bg); background: var(--ink); }
+  nav a.cta:hover { background: var(--accent); }
+
+  /* ── chapter system ──────────────────────────────────────────── */
+  .chapter { min-height: 100vh; position: relative; display: flex; align-items: center; padding: 120px 64px 96px; }
+  .ch-mark { position: absolute; top: 96px; left: 64px; display: flex; align-items: baseline; gap: 16px; font-family: var(--mono); font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+  .ch-mark .num { font-family: var(--serif); font-size: 14px; color: var(--accent); font-weight: 500; padding: 2px 8px; border: 1px solid var(--accent); border-radius: 2px; }
+
+  /* ── hero ─────────────────────────────────────────────────────── */
+  .hero { padding-top: 160px; }
+  .hero-content { max-width: 1280px; margin: 0 auto; width: 100%; }
+  .badge { display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px; background: rgba(255,90,44,0.08); border: 1px solid rgba(255,90,44,0.3); border-radius: 999px; font-family: var(--mono); font-size: 11.5px; color: var(--accent2); margin-bottom: 40px; }
+  .badge::before { content: ""; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  h1 { font-size: clamp(64px, 11vw, 168px); font-weight: 500; line-height: 0.92; letter-spacing: -0.045em; margin: 0 0 32px; max-width: none; }
+  h1 .l1 { display: block; }
+  h1 .l2 { display: block; padding-left: clamp(40px, 8vw, 120px); }
+  h1 .l3 { display: block; padding-left: clamp(80px, 16vw, 240px); color: var(--accent); }
+
+  .hero-meta { display: grid; grid-template-columns: 1fr auto auto; align-items: end; gap: 48px; margin-top: 64px; padding-top: 32px; border-top: 1px solid #1a1a1a; }
+  .hero-lede { font-size: 19px; line-height: 1.5; color: var(--text2); max-width: 52ch; letter-spacing: -0.005em; }
+  .hero-meta .stat { text-align: right; }
+  .hero-meta .stat .v { font-size: 36px; font-weight: 500; letter-spacing: -0.03em; line-height: 1; color: var(--ink); }
+  .hero-meta .stat .l { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 6px; }
+
+  /* ── scroll indicator ─────────────────────────────────────────── */
+  .scroll-cue { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 12px; font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; }
+  .scroll-cue::after { content: ""; width: 1px; height: 32px; background: linear-gradient(to bottom, var(--text3), transparent); animation: cue 2.4s cubic-bezier(0.32,0.72,0,1) infinite; }
+  @keyframes cue { 0% { transform: translateY(-12px); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(12px); opacity: 0; } }
+</style></head>
+<body>
+
+<nav>
+  <a href="#cap1">I. Tesis</a>
+  <a href="#cap2">II. Cómo</a>
+  <a href="#cap3">III. Demo</a>
+  <a href="#cap4">IV. Equipo</a>
+  <a href="#login" class="cta">Empezar →</a>
+</nav>
+
+<section class="chapter hero">
+  <div class="ambient">
+    <div class="frag" style="top:18%; left:8%; --rot:-4deg" data-cite="1">cláusula 4 vacaciones</div>
+    <div class="frag" style="top:32%; right:12%; --rot:3deg" data-cite="2">manual cap. 7</div>
+    <div class="frag" style="top:62%; left:15%; --rot:-2deg" data-cite="3">política teletrabajo</div>
+    <div class="frag" style="top:74%; right:8%; --rot:5deg" data-cite="4">convenio anexo III</div>
+    <div class="frag" style="top:48%; left:42%; --rot:-3deg" data-cite="5">plan compensación Q2</div>
+  </div>
+
+  <div class="ch-mark">
+    <span class="num">I</span>
+    <span>Tesis del producto</span>
+  </div>
+
+  <div class="hero-content">
+    <div class="badge">Motor RAG · v0.2 en producción</div>
+
+    <h1>
+      <span class="l1">Cada respuesta</span>
+      <span class="l2"><em style="font-style:italic">trae</em> consigo</span>
+      <span class="l3">su fuente.</span>
+    </h1>
+
+    <div class="hero-meta">
+      <p class="hero-lede">
+        XTask es la primera plataforma empresarial donde el asistente de IA no inventa: cada afirmación nace de una política, contrato o métrica del tenant, con sección y fecha de ingestión visibles.
+      </p>
+      <div class="stat"><div class="v">500+</div><div class="l">empresas</div></div>
+      <div class="stat"><div class="v">22</div><div class="l">países</div></div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">Cap. II ↓</div>
+</section>
+
+</body></html>

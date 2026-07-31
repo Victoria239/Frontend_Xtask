@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Dashboard D — Cited data + tenant context</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505; --bg2: #0B0B0B; --surface: #131316; --surface2: #1B1B1F;
+    --rule: #1F1F23; --rule2: #2C2C32; --ink: #F5F4F1; --text2: #A6A29C;
+    --text3: #6E6A65; --text4: #443F39;
+    --accent: #FF5A2C; --accent2: #FFB593; --green: #6FAB85; --red: #E56A5D;
+    --sans: 'Geist', sans-serif; --mono: 'Geist Mono', monospace;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+  .app { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+
+  /* ── Sidebar (same as A) ────────────────────────────────── */
+  .side { background: var(--bg2); border-right: 1px solid var(--rule); padding: 22px 14px; display: flex; flex-direction: column; gap: 22px; }
+  .side .brand { display: flex; align-items: center; gap: 10px; padding: 0 10px; font-size: 15.5px; font-weight: 500; letter-spacing: -0.012em; }
+  .logo-mark { width: 24px; height: 24px; background: var(--accent); border-radius: 6px; display: grid; place-items: center; color: var(--bg); font-size: 13px; font-weight: 600; letter-spacing: -0.04em; }
+  .section-h { font-family: var(--mono); font-size: 10.5px; color: var(--text4); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 10px; margin-bottom: 6px; }
+  .side .nav { display: flex; flex-direction: column; gap: 1px; }
+  .side a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; color: var(--text2); border-radius: 6px; font-size: 13.5px; text-decoration: none; transition: background 160ms var(--ease), color 160ms var(--ease); }
+  .side a:hover { background: var(--surface); color: var(--ink); }
+  .side a.active { background: var(--surface2); color: var(--ink); }
+  .side a.active .ic { color: var(--accent); }
+  .side svg.ic { width: 14px; height: 14px; color: var(--text3); }
+  .side-foot { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--rule); display: flex; align-items: center; gap: 10px; padding-left: 10px; }
+  .side-foot .av { width: 28px; height: 28px; border-radius: 50%; background: var(--surface2); display: grid; place-items: center; font-family: var(--mono); font-size: 11px; color: var(--text2); border: 1px solid var(--rule2); }
+  .side-foot .n { font-size: 13px; color: var(--ink); font-weight: 500; line-height: 1.2; }
+  .side-foot .t { font-family: var(--mono); font-size: 10.5px; color: var(--text3); }
+
+  /* ── TENANT CONTEXT BAR — la pieza diferenciadora ──────── */
+  .tbar {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto 1fr auto;
+    align-items: center;
+    gap: 28px;
+    padding: 12px 28px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text2);
+  }
+  .tbar-tenant {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    background: var(--surface);
+    border: 1px solid var(--rule2);
+    border-radius: 6px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 160ms var(--ease);
+  }
+  .tbar-tenant:hover { border-color: #3a3a40; }
+  .tbar-tenant::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--green);
+  }
+  .tbar-tenant .chev { color: var(--text3); margin-left: 2px; }
+  .tbar-item { display: inline-flex; gap: 6px; align-items: baseline; }
+  .tbar-item .l { color: var(--text3); }
+  .tbar-item .v { color: var(--ink); }
+  .tbar-right { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
+  .tbar-right .badge { padding: 3px 8px; border: 1px solid var(--rule); border-radius: 4px; }
+  .tbar-right .badge.alert { color: var(--red); border-color: rgba(229,106,93,0.3); background: rgba(229,106,93,0.08); }
+  .tbar-right .lookup { padding: 5px 10px; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; cursor: pointer; transition: border-color 160ms var(--ease); }
+  .tbar-right .lookup:hover { border-color: var(--rule2); color: var(--ink); }
+  .tbar-right .lookup kbd { margin-left: 8px; padding: 1px 5px; border: 1px solid var(--rule2); border-radius: 3px; font-size: 10px; color: var(--text3); }
+
+  /* ── Main ───────────────────────────────────────────────── */
+  .main { padding: 28px 32px; }
+  .pageh { margin-bottom: 30px; }
+  .pageh h1 { font-size: 26px; font-weight: 500; letter-spacing: -0.022em; margin: 0 0 6px; }
+  .pageh h1 em { color: var(--accent2); font-style: italic; font-weight: 500; }
+  .pageh p { font-size: 13.5px; color: var(--text3); margin: 0; }
+  .pageh p a { color: var(--accent2); text-decoration: none; border-bottom: 1px solid rgba(255,181,147,0.3); }
+  .pageh p a:hover { color: var(--accent); }
+
+  /* ── Cited metric grid ─────────────────────────────────── */
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; margin-bottom: 18px; }
+  .metric { background: var(--bg2); padding: 22px 24px; position: relative; cursor: pointer; transition: background 200ms var(--ease); }
+  .metric:hover { background: var(--surface); }
+  .metric-l { font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
+  .metric-v { font-size: 36px; font-weight: 500; letter-spacing: -0.03em; line-height: 1; color: var(--ink); margin: 0 0 12px; }
+  .metric-v em { color: var(--accent2); font-style: normal; font-weight: 500; }
+  .metric-v .cite-sup { font-family: var(--mono); font-size: 11px; color: var(--accent); font-weight: 500; vertical-align: super; line-height: 0; margin-left: 4px; padding: 1px 5px; background: rgba(255,90,44,0.1); border-radius: 3px; cursor: help; }
+  .metric-foot { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; }
+  .metric-delta { font-family: var(--mono); font-size: 10.5px; padding: 2px 7px; border-radius: 3px; }
+  .metric-delta.up { color: var(--green); background: rgba(111,171,133,0.1); }
+  .metric-delta.down { color: var(--red); background: rgba(229,106,93,0.1); }
+  .metric-source { color: var(--text3); font-size: 11.5px; }
+
+  /* ── Two-col main area ─────────────────────────────────── */
+  .two { display: grid; grid-template-columns: 1.5fr 1fr; gap: 18px; margin-bottom: 18px; }
+  .panel { background: var(--bg2); border: 1px solid var(--rule); border-radius: 12px; }
+  .panel-head { padding: 16px 22px; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; }
+  .panel-head h3 { font-size: 14.5px; font-weight: 500; letter-spacing: -0.01em; margin: 0; display: flex; align-items: center; gap: 10px; }
+  .panel-head h3 .cite-sup { font-family: var(--mono); font-size: 10px; color: var(--accent); font-weight: 500; padding: 1px 5px; background: rgba(255,90,44,0.1); border-radius: 3px; cursor: help; }
+  .panel-head .actions { display: flex; gap: 8px; align-items: center; }
+  .panel-head .actions a { font-family: var(--mono); font-size: 11px; color: var(--text3); text-decoration: none; transition: color 160ms var(--ease); }
+  .panel-head .actions a:hover { color: var(--ink); }
+
+  /* Sources panel */
+  .sources-panel-body { padding: 4px 0; }
+  .source-row { display: grid; grid-template-columns: 36px 1fr auto; gap: 14px; padding: 14px 22px; border-bottom: 1px solid var(--rule); align-items: center; }
+  .source-row:last-child { border-bottom: none; }
+  .source-id { font-family: var(--mono); font-size: 11px; color: var(--accent); font-weight: 500; padding: 3px 8px; background: rgba(255,90,44,0.08); border: 1px solid rgba(255,90,44,0.25); border-radius: 4px; text-align: center; }
+  .source-name { font-size: 13.5px; color: var(--ink); font-weight: 500; letter-spacing: -0.008em; margin: 0 0 4px; }
+  .source-meta { font-family: var(--mono); font-size: 11px; color: var(--text3); margin: 0; }
+  .source-go { font-family: var(--mono); font-size: 11px; color: var(--text2); text-decoration: none; padding: 4px 10px; border: 1px solid var(--rule); border-radius: 4px; transition: all 160ms var(--ease); }
+  .source-go:hover { color: var(--ink); border-color: var(--rule2); background: var(--surface); }
+
+  /* Activity panel — events with citations */
+  .event { display: grid; grid-template-columns: 70px 1fr; gap: 14px; padding: 14px 22px; border-bottom: 1px solid var(--rule); }
+  .event:last-child { border-bottom: none; }
+  .event-time { font-family: var(--mono); font-size: 11px; color: var(--text3); padding-top: 2px; }
+  .event-body p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--text2); }
+  .event-body p strong { color: var(--ink); font-weight: 500; }
+  .event-body .cite-sup { font-family: var(--mono); font-size: 10px; color: var(--accent); font-weight: 500; vertical-align: super; line-height: 0; margin-left: 2px; padding: 1px 5px; background: rgba(255,90,44,0.1); border-radius: 3px; cursor: help; }
+  .event-body .tag { font-family: var(--mono); font-size: 10px; padding: 1px 6px; border-radius: 3px; margin-left: 8px; }
+  .event-body .tag.pos { color: var(--green); background: rgba(111,171,133,0.1); }
+  .event-body .tag.warn { color: var(--red); background: rgba(229,106,93,0.1); }
+</style></head>
+<body>
+<div class="app">
+  <!-- ── Sidebar ─────────────────────────────────────────── -->
+  <aside class="side">
+    <div class="brand">
+      <span class="logo-mark">X</span>
+      <span>XTask</span>
+    </div>
+    <div>
+      <p class="section-h">workspace</p>
+      <div class="nav">
+        <a href="#" class="active"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Resumen</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>Proyectos</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Empleados</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Nóminas</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg>Finanzas</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>KPIs y OKRs</a>
+      </div>
+    </div>
+    <div>
+      <p class="section-h">IA</p>
+      <div class="nav">
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.4 8.4 0 013.8-.9h.5a8.5 8.5 0 018 8v.5z"/></svg>Asistente</a>
+        <a href="#"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Documentos</a>
+      </div>
+    </div>
+    <div class="side-foot">
+      <div class="av">AX</div>
+      <div>
+        <div class="n">Admin XTask</div>
+        <div class="t">role: admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main column ─────────────────────────────────────── -->
+  <div>
+    <!-- TENANT CONTEXT BAR -->
+    <div class="tbar">
+      <button class="tbar-tenant">tenant: andorra-acme <span class="chev">▾</span></button>
+      <span class="tbar-item"><span class="l">empleados</span><span class="v">347</span></span>
+      <span class="tbar-item"><span class="l">corpus</span><span class="v">1.847 docs</span></span>
+      <span class="tbar-item"><span class="l">RAG</span><span class="v" style="color:var(--green)">36ms p95</span></span>
+      <span class="tbar-item"><span class="l">datos hasta</span><span class="v">15 jun 09:42</span></span>
+      <div></div>
+      <div class="tbar-right">
+        <span class="badge alert">3 OKRs at-risk</span>
+        <button class="lookup">⌕ Buscar todo <kbd>⌘K</kbd></button>
+      </div>
+    </div>
+
+    <main class="main">
+      <div class="pageh">
+        <h1>Resumen <em>auditable</em> · semana 24</h1>
+        <p>Cada métrica enlaza a la consulta SQL que la generó. <a href="#">Ver glosario de definiciones</a> · <a href="#">Exportar a CSV</a></p>
+      </div>
+
+      <!-- Cited metrics — 6 tiles cada uno con [N] -->
+      <div class="metrics">
+        <div class="metric">
+          <p class="metric-l">empleados activos</p>
+          <p class="metric-v">347<span class="cite-sup">[1]</span></p>
+          <div class="metric-foot">
+            <span class="metric-delta up">+12 este mes</span>
+            <span class="metric-source">contract_status=active</span>
+          </div>
+        </div>
+        <div class="metric">
+          <p class="metric-l">consultas al copiloto · 7d</p>
+          <p class="metric-v">1.247<span class="cite-sup">[2]</span></p>
+          <div class="metric-foot">
+            <span class="metric-delta up">+24% vs anterior</span>
+            <span class="metric-source">svc_ai.messages role='user'</span>
+          </div>
+        </div>
+        <div class="metric">
+          <p class="metric-l">contratos firmados · Q2</p>
+          <p class="metric-v">38<span class="cite-sup">[3]</span></p>
+          <div class="metric-foot">
+            <span class="metric-delta up">+12 esta semana</span>
+            <span class="metric-source">svc_erp.contracts status='signed'</span>
+          </div>
+        </div>
+        <div class="metric">
+          <p class="metric-l">OKRs on-track</p>
+          <p class="metric-v">54<em>%</em><span class="cite-sup">[4]</span></p>
+          <div class="metric-foot">
+            <span class="metric-delta up">+8 pp vs mes</span>
+            <span class="metric-source">avg progress >= 0.85</span>
+          </div>
+        </div>
+        <div class="metric">
+          <p class="metric-l">nómina mensual · junio</p>
+          <p class="metric-v">€428k<span class="cite-sup">[5]</span></p>
+          <div class="metric-foot">
+            <span class="metric-delta up">+4.2% vs mayo</span>
+            <span class="metric-source">sum(payrolls.amount)</span>
+          </div>
+        </div>
+        <div class="metric">
+          <p class="metric-l">latencia RAG · p95</p>
+          <p class="metric-v" style="color:var(--green)">36<em>ms</em><span class="cite-sup">[6]</span></p>
+          <div class="metric-foot">
+            <span class="metric-delta up">SLO 300ms</span>
+            <span class="metric-source">prometheus · histogram_quantile</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two-col: actividad + fuentes -->
+      <div class="two">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Actividad reciente <span class="cite-sup">[7]</span></h3>
+            <div class="actions"><a href="#">Filtrar</a><a href="#">Exportar</a></div>
+          </div>
+          <div>
+            <div class="event">
+              <span class="event-time">09:42</span>
+              <div class="event-body">
+                <p><strong>Felipe Cortés</strong> generó el contrato de <strong>Ana García</strong> usando la plantilla "Tiempo indefinido"<span class="cite-sup">[3]</span> + 4 citas del corpus<span class="cite-sup">[8]</span>.<span class="tag pos">+ contrato</span></p>
+              </div>
+            </div>
+            <div class="event">
+              <span class="event-time">09:18</span>
+              <div class="event-body">
+                <p>OKR <strong>"Lanzamientos Q2"</strong> alcanzó <strong>108%</strong> del target<span class="cite-sup">[4]</span>. Bono €1.840 calculado por plan de compensación 2026 §4.2<span class="cite-sup">[9]</span>.<span class="tag pos">+ achieved</span></p>
+              </div>
+            </div>
+            <div class="event">
+              <span class="event-time">08:55</span>
+              <div class="event-body">
+                <p>OKR <strong>"Ventas LATAM"</strong> entró en <strong>at-risk</strong><span class="cite-sup">[4]</span>: cumplimiento 41%, faltan 18 días para vencer.<span class="tag warn">⚠ alerta</span></p>
+              </div>
+            </div>
+            <div class="event">
+              <span class="event-time">08:34</span>
+              <div class="event-body">
+                <p>El corpus ingestó <strong>3 documentos</strong> desde Google Drive<span class="cite-sup">[10]</span>: 47 nuevos chunks vectorizados en pgvector.<span class="tag pos">+ corpus</span></p>
+              </div>
+            </div>
+            <div class="event">
+              <span class="event-time">07:50</span>
+              <div class="event-body">
+                <p><strong>Juan Diego Toro</strong> aprobó los <strong>2 contratos</strong> pendientes de Lucía Vega y Pedro Mata<span class="cite-sup">[3]</span>.<span class="tag pos">+ firmado</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Fuentes citadas en esta vista</h3>
+            <div class="actions"><a href="#">Ver consultas SQL</a></div>
+          </div>
+          <div class="sources-panel-body">
+            <div class="source-row">
+              <span class="source-id">[1]</span>
+              <div>
+                <p class="source-name">svc_employees.employees</p>
+                <p class="source-meta">SELECT COUNT(*) WHERE contract_status='active' AND tenant_id=1</p>
+              </div>
+              <a class="source-go">SQL ↗</a>
+            </div>
+            <div class="source-row">
+              <span class="source-id">[2]</span>
+              <div>
+                <p class="source-name">svc_ai.messages</p>
+                <p class="source-meta">role='user' AND created_at &gt;= NOW() - INTERVAL '7 days'</p>
+              </div>
+              <a class="source-go">SQL ↗</a>
+            </div>
+            <div class="source-row">
+              <span class="source-id">[3]</span>
+              <div>
+                <p class="source-name">svc_erp.contracts</p>
+                <p class="source-meta">status IN ('signed','generated') · trimestre Q2</p>
+              </div>
+              <a class="source-go">SQL ↗</a>
+            </div>
+            <div class="source-row">
+              <span class="source-id">[4]</span>
+              <div>
+                <p class="source-name">svc_kpis.okrs</p>
+                <p class="source-meta">window: rolling 30d · status updated by cascade trigger</p>
+              </div>
+              <a class="source-go">SQL ↗</a>
+            </div>
+            <div class="source-row">
+              <span class="source-id">[5]</span>
+              <div>
+                <p class="source-name">svc_payroll.payrolls</p>
+                <p class="source-meta">SUM(amount) WHERE month='2026-06'</p>
+              </div>
+              <a class="source-go">SQL ↗</a>
+            </div>
+            <div class="source-row">
+              <span class="source-id">[6]</span>
+              <div>
+                <p class="source-name">Prometheus · xtask_rag</p>
+                <p class="source-meta">histogram_quantile(0.95, rate(rag_search_duration[5m]))</p>
+              </div>
+              <a class="source-go">métrica ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body></html>
