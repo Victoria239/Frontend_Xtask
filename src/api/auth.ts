@@ -15,6 +15,14 @@ export const register = (data: RegisterRequest) =>
 export const getMe = () =>
   apiClient.get<User>("/auth/me").then((r) => r.data);
 
-/* Cerrar sesión */
-export const logout = () =>
-  apiClient.post("/auth/logout").then((r) => r.data);
+/* Cerrar sesión — invalida la sesión en Keycloak */
+export const logout = (refreshToken?: string) =>
+  apiClient
+    .post("/auth/logout", refreshToken ? { refresh_token: refreshToken } : {})
+    .then((r) => r.data);
+
+/* Refrescar access token contra Keycloak */
+export const refresh = (refreshToken: string) =>
+  apiClient
+    .post<LoginResponse>("/auth/refresh", { refresh_token: refreshToken })
+    .then((r) => r.data);

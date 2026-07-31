@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Dashboard B — Command-center denso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505; --bg2: #0B0B0B; --surface: #131316; --surface2: #1B1B1F;
+    --rule: #1F1F23; --rule2: #2C2C32; --ink: #F5F4F1; --text2: #A6A29C;
+    --text3: #6E6A65; --text4: #443F39;
+    --accent: #FF5A2C; --accent2: #FFB593; --green: #6FAB85; --red: #E56A5D; --amber: #E0A04A;
+    --sans: 'Geist', sans-serif; --mono: 'Geist Mono', monospace;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; min-height: 100vh; font-size: 13.5px; line-height: 1.5; }
+
+  .app { display: grid; grid-template-columns: 56px 1fr; min-height: 100vh; }
+
+  /* ── Sidebar collapsed icon-only ─────────────────────────── */
+  .side { background: var(--bg2); border-right: 1px solid var(--rule); padding: 18px 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .side .logo-mark { width: 26px; height: 26px; background: var(--accent); border-radius: 6px; display: grid; place-items: center; color: var(--bg); font-size: 14px; font-weight: 600; letter-spacing: -0.04em; margin-bottom: 24px; }
+  .side a { width: 36px; height: 36px; display: grid; place-items: center; color: var(--text3); border-radius: 8px; transition: background 160ms var(--ease), color 160ms var(--ease); position: relative; }
+  .side a:hover { background: var(--surface); color: var(--ink); }
+  .side a.active { color: var(--accent); background: var(--surface2); }
+  .side a .dot { position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--red); border: 1.5px solid var(--bg2); }
+  .side svg { width: 16px; height: 16px; }
+  .side-foot { margin-top: auto; padding-top: 16px; }
+  .side-foot .av { width: 30px; height: 30px; border-radius: 50%; background: var(--surface2); display: grid; place-items: center; font-family: var(--mono); font-size: 11.5px; color: var(--text2); border: 1px solid var(--rule2); cursor: pointer; }
+
+  /* ── Top bar ────────────────────────────────────────────── */
+  .top { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 16px; padding: 14px 28px; border-bottom: 1px solid var(--rule); background: var(--bg2); }
+  .crumbs { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; color: var(--text3); }
+  .crumbs .tenant { background: var(--surface); border: 1px solid var(--rule); border-radius: 4px; padding: 3px 8px; color: var(--ink); cursor: pointer; transition: border-color 160ms var(--ease); }
+  .crumbs .tenant:hover { border-color: var(--rule2); }
+  .crumbs .sep { color: var(--text4); }
+  .crumbs .cur { color: var(--ink); }
+
+  .cmd-bar { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 7px 12px; display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 12px; color: var(--text3); max-width: 480px; margin: 0 auto; cursor: pointer; transition: border-color 160ms var(--ease); }
+  .cmd-bar:hover { border-color: var(--rule2); }
+  .cmd-bar kbd { padding: 1px 6px; border: 1px solid var(--rule2); border-radius: 3px; font-size: 10.5px; }
+
+  .top-right { display: flex; gap: 4px; align-items: center; }
+  .top-btn { width: 32px; height: 32px; display: grid; place-items: center; color: var(--text3); border-radius: 6px; cursor: pointer; transition: all 160ms var(--ease); position: relative; }
+  .top-btn:hover { background: var(--surface); color: var(--ink); }
+  .top-btn svg { width: 15px; height: 15px; }
+  .top-btn .dot { position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--red); border: 1.5px solid var(--bg2); }
+
+  .main { padding: 24px 28px; }
+
+  /* ── Header bar ─────────────────────────────────────────── */
+  .pageh { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 18px; gap: 16px; }
+  .pageh h1 { font-size: 22px; font-weight: 500; letter-spacing: -0.018em; margin: 0; }
+  .pageh .meta { font-family: var(--mono); font-size: 11px; color: var(--text3); display: flex; gap: 12px; align-items: center; }
+  .pageh .meta .live { color: var(--green); display: inline-flex; align-items: center; gap: 6px; }
+  .pageh .meta .live::before { content: ""; width: 5px; height: 5px; background: var(--green); border-radius: 50%; box-shadow: 0 0 4px var(--green); }
+  .pageh .seg { display: flex; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+  .pageh .seg button { background: transparent; border: 0; color: var(--text3); font-family: var(--mono); font-size: 11px; padding: 5px 10px; cursor: pointer; }
+  .pageh .seg button.act { background: var(--surface2); color: var(--ink); }
+
+  /* ── Dense KPI grid — 4×3 = 12 tiles ─────────────────────── */
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(0, auto); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; margin-bottom: 18px; }
+  .tile { background: var(--bg2); padding: 14px 16px; min-height: 88px; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; transition: background 200ms var(--ease); cursor: pointer; position: relative; }
+  .tile:hover { background: var(--surface); }
+  .tile-head { display: flex; align-items: center; justify-content: space-between; }
+  .tile-l { font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .tile-delta { font-family: var(--mono); font-size: 10.5px; padding: 1px 6px; border-radius: 3px; }
+  .tile-delta.up   { color: var(--green); background: rgba(111,171,133,0.1); }
+  .tile-delta.down { color: var(--red);   background: rgba(229,106,93,0.1);  }
+  .tile-delta.flat { color: var(--text3); background: var(--surface); }
+  .tile-v { font-size: 24px; font-weight: 500; letter-spacing: -0.025em; line-height: 1; color: var(--ink); }
+  .tile-v em { color: var(--accent); font-style: normal; }
+  .tile-v.alert { color: var(--red); }
+  .tile-spark { height: 18px; margin-top: 2px; }
+
+  /* ── Two-col content row ─────────────────────────────────── */
+  .row { display: grid; grid-template-columns: 1.5fr 1fr; gap: 18px; }
+  .panel { background: var(--bg2); border: 1px solid var(--rule); border-radius: 10px; }
+  .panel-head { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--rule); }
+  .panel-head h3 { font-size: 13.5px; font-weight: 500; letter-spacing: -0.008em; margin: 0; }
+  .panel-head .more { font-family: var(--mono); font-size: 11px; color: var(--text3); cursor: pointer; transition: color 160ms var(--ease); }
+  .panel-head .more:hover { color: var(--ink); }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 10px 18px; font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; border-bottom: 1px solid var(--rule); }
+  td { padding: 11px 18px; border-bottom: 1px solid var(--rule); color: var(--text2); }
+  tr:last-child td { border-bottom: none; }
+  td.strong { color: var(--ink); font-weight: 500; }
+  td.num { font-family: var(--mono); text-align: right; }
+  td .tag { font-family: var(--mono); font-size: 10.5px; padding: 2px 7px; border-radius: 3px; display: inline-block; }
+  td .tag.ok { color: var(--green); background: rgba(111,171,133,0.12); }
+  td .tag.risk { color: var(--red); background: rgba(229,106,93,0.12); }
+  td .tag.prog { color: var(--amber); background: rgba(224,160,74,0.12); }
+  td .bar-mini { display: inline-flex; align-items: center; gap: 8px; }
+  td .bar-mini i { display: block; height: 4px; width: 60px; background: var(--rule2); border-radius: 999px; overflow: hidden; position: relative; }
+  td .bar-mini i::after { content: ""; position: absolute; inset: 0; right: var(--gap, 50%); background: var(--accent); border-radius: 999px; }
+
+  /* Right column blocks */
+  .stack { display: flex; flex-direction: column; gap: 14px; }
+  .block { background: var(--bg2); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; }
+  .block h4 { font-size: 12.5px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 12px; font-family: var(--mono); }
+  .block-item { display: flex; justify-content: space-between; padding: 7px 0; font-size: 13px; border-top: 1px solid var(--rule); }
+  .block-item:first-of-type { border-top: none; }
+  .block-item .l { color: var(--text2); display: inline-flex; align-items: center; gap: 8px; }
+  .block-item .l .ico { width: 14px; height: 14px; color: var(--text3); }
+  .block-item .v { font-family: var(--mono); color: var(--ink); }
+  .block-item.warn .v { color: var(--amber); }
+  .block-item.err  .v { color: var(--red); }
+</style></head>
+<body>
+<div class="app">
+  <aside class="side">
+    <span class="logo-mark">X</span>
+    <a href="#" class="active" title="Resumen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg></a>
+    <a href="#" title="Proyectos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></a>
+    <a href="#" title="Empleados"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></a>
+    <a href="#" title="Nóminas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></a>
+    <a href="#" title="Finanzas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg></a>
+    <a href="#" title="KPIs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg><span class="dot"></span></a>
+    <a href="#" title="Asistente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.4 8.4 0 013.8-.9h.5a8.5 8.5 0 018 8v.5z"/></svg></a>
+    <a href="#" title="Documentos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></a>
+    <div class="side-foot">
+      <div class="av">AX</div>
+    </div>
+  </aside>
+
+  <div>
+    <header class="top">
+      <div class="crumbs">
+        <span class="tenant">andorra-acme ▾</span>
+        <span class="sep">/</span><span>workspace</span>
+        <span class="sep">/</span><span class="cur">Resumen</span>
+      </div>
+      <div class="cmd-bar">⌕ Buscar empleados, contratos, métricas, plantillas… <kbd>⌘K</kbd></div>
+      <div class="top-right">
+        <button class="top-btn" title="Notificaciones"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="dot"></span></button>
+        <button class="top-btn" title="Ayuda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
+        <button class="top-btn" title="Salir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="pageh">
+        <div>
+          <h1>Resumen ejecutivo</h1>
+          <p style="margin:4px 0 0; font-size: 13px; color: var(--text3);">Vista consolidada de tu tenant. Cada métrica se actualiza en tiempo real.</p>
+        </div>
+        <div class="meta">
+          <span class="live">live · actualizado 09:42</span>
+          <div class="seg">
+            <button>24h</button>
+            <button class="act">7d</button>
+            <button>30d</button>
+            <button>Q2</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dense KPI grid -->
+      <div class="grid">
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">Empleados activos</span><span class="tile-delta up">+12</span></div>
+          <span class="tile-v">347</span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,12 10,11 20,10 30,8 40,9 50,7 60,6 70,5 80,4 90,3 100,2" fill="none" stroke="#6FAB85" stroke-width="1.5"/></svg>
+        </div>
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">Proyectos en curso</span><span class="tile-delta up">+3</span></div>
+          <span class="tile-v">12</span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,14 10,13 20,11 30,12 40,10 50,9 60,7 70,8 80,6 90,5 100,4" fill="none" stroke="#FF5A2C" stroke-width="1.5"/></svg>
+        </div>
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">OKRs on-track</span><span class="tile-delta up">+8%</span></div>
+          <span class="tile-v">54<em>%</em></span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,14 10,12 20,10 30,11 40,9 50,8 60,7 70,6 80,5 90,4 100,3" fill="none" stroke="#6FAB85" stroke-width="1.5"/></svg>
+        </div>
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">OKRs at-risk</span><span class="tile-delta down">+2</span></div>
+          <span class="tile-v alert">3</span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,10 10,11 20,12 30,11 40,13 50,12 60,14 70,15 80,14 90,16 100,15" fill="none" stroke="#E56A5D" stroke-width="1.5"/></svg>
+        </div>
+
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">Nómina mensual</span><span class="tile-delta up">+4.2%</span></div>
+          <span class="tile-v">€428k</span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,12 10,11 20,12 30,11 40,10 50,9 60,8 70,7 80,7 90,6 100,5" fill="none" stroke="#A6A29C" stroke-width="1.5"/></svg>
+        </div>
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">Presupuesto Q2</span><span class="tile-delta flat">72%</span></div>
+          <span class="tile-v">€1.84M</span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,16 10,15 20,14 30,12 40,11 50,9 60,8 70,7 80,6 90,5 100,4" fill="none" stroke="#FF5A2C" stroke-width="1.5"/></svg>
+        </div>
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">Consultas copiloto</span><span class="tile-delta up">+24%</span></div>
+          <span class="tile-v">1.247</span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,14 10,12 20,13 30,10 40,9 50,8 60,6 70,7 80,5 90,4 100,3" fill="none" stroke="#FFB593" stroke-width="1.5"/></svg>
+        </div>
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">Citas generadas</span><span class="tile-delta up">+18%</span></div>
+          <span class="tile-v">2.494</span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,13 10,12 20,10 30,11 40,8 50,7 60,8 70,6 80,5 90,4 100,3" fill="none" stroke="#FFB593" stroke-width="1.5"/></svg>
+        </div>
+
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">Contratos firmados</span><span class="tile-delta up">+12</span></div>
+          <span class="tile-v">38</span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,14 10,13 20,12 30,11 40,9 50,8 60,7 70,5 80,4 90,3 100,2" fill="none" stroke="#6FAB85" stroke-width="1.5"/></svg>
+        </div>
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">Documentos corpus</span><span class="tile-delta up">+47</span></div>
+          <span class="tile-v">1.847</span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,15 10,14 20,12 30,10 40,9 50,7 60,6 70,5 80,4 90,3 100,2" fill="none" stroke="#A6A29C" stroke-width="1.5"/></svg>
+        </div>
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">Onboarding pendiente</span><span class="tile-delta flat">=</span></div>
+          <span class="tile-v">5</span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,8 10,9 20,8 30,10 40,9 50,8 60,9 70,8 80,9 90,8 100,9" fill="none" stroke="#A6A29C" stroke-width="1.5"/></svg>
+        </div>
+        <div class="tile">
+          <div class="tile-head"><span class="tile-l">Aprobaciones pendientes</span><span class="tile-delta down">+3</span></div>
+          <span class="tile-v alert">8</span>
+          <svg class="tile-spark" viewBox="0 0 100 18" preserveAspectRatio="none"><polyline points="0,12 10,10 20,11 30,9 40,8 50,7 60,6 70,7 80,5 90,4 100,3" fill="none" stroke="#E56A5D" stroke-width="1.5"/></svg>
+        </div>
+      </div>
+
+      <!-- Two-col content -->
+      <div class="row">
+        <div class="panel">
+          <div class="panel-head"><h3>OKRs activos</h3><span class="more">Ver todos →</span></div>
+          <table>
+            <thead>
+              <tr><th>OKR</th><th>Responsable</th><th>Avance</th><th>Estado</th><th style="text-align:right">Vence</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="strong">Crecer ingresos LATAM 30%</td><td>Jairo C.</td><td class="num"><span class="bar-mini">72%<i style="--gap:28%"></i></span></td><td><span class="tag ok">on-track</span></td><td class="num">30 jun</td></tr>
+              <tr><td class="strong">Cerrar 18 clientes piloto</td><td>Felipe C.</td><td class="num"><span class="bar-mini">83%<i style="--gap:17%"></i></span></td><td><span class="tag ok">on-track</span></td><td class="num">30 jun</td></tr>
+              <tr><td class="strong">Lanzamientos Q2 (12 releases)</td><td>Ana G.</td><td class="num"><span class="bar-mini">108%<i style="--gap:0%"></i></span></td><td><span class="tag ok">achieved</span></td><td class="num">cerrado</td></tr>
+              <tr><td class="strong">Reducir churn 5pp</td><td>Manuel R.</td><td class="num"><span class="bar-mini">58%<i style="--gap:42%"></i></span></td><td><span class="tag prog">in progress</span></td><td class="num">30 jun</td></tr>
+              <tr><td class="strong">Expansión Portugal</td><td>Jairo C.</td><td class="num"><span class="bar-mini">41%<i style="--gap:59%"></i></span></td><td><span class="tag risk">at-risk</span></td><td class="num">18 jul</td></tr>
+              <tr><td class="strong">SOC 2 Type I</td><td>Juan D.</td><td class="num"><span class="bar-mini">66%<i style="--gap:34%"></i></span></td><td><span class="tag prog">in progress</span></td><td class="num">15 ago</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="stack">
+          <div class="block">
+            <h4>Tus pendientes</h4>
+            <div class="block-item err"><span class="l"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>OKR at-risk sin plan</span><span class="v">1</span></div>
+            <div class="block-item warn"><span class="l"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Aprobar bonos Q2</span><span class="v">3</span></div>
+            <div class="block-item"><span class="l"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>Revisar contratos</span><span class="v">2</span></div>
+            <div class="block-item"><span class="l"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Onboarding</span><span class="v">1</span></div>
+          </div>
+
+          <div class="block">
+            <h4>Salud del sistema</h4>
+            <div class="block-item"><span class="l">Latencia RAG p95</span><span class="v" style="color:var(--green)">36ms</span></div>
+            <div class="block-item"><span class="l">Uptime 30d</span><span class="v" style="color:var(--green)">99.94%</span></div>
+            <div class="block-item"><span class="l">Cuota OpenAI usada</span><span class="v">68%</span></div>
+            <div class="block-item"><span class="l">Backups</span><span class="v" style="color:var(--green)">al día</span></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body></html>

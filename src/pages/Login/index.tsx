@@ -1,252 +1,217 @@
-/* Página de Login — split-screen con branding + formulario */
+/* Login Xtask — propuesta D: command palette minimal
+ *
+ * Preserva 100% del flujo original:
+ * - useAuth().login con identifier + password
+ * - Redirect a / si ya está autenticado
+ * - Manejo de error y loading
+ *
+ * Aplica skills:
+ * - SSO primero (acción de mayor frecuencia para usuarios B2B con Google Workspace)
+ * - Email-password secundario
+ * - Sin animación al pulsar Enter (login es high-frequency, emil-design-eng)
+ * - Botón con scale(0.98) en :active
+ * - Hovers gated por @media (hover: hover) and (pointer: fine)
+ * - prefers-reduced-motion respetado
+ */
 
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Alert,
-  CircularProgress,
-  InputAdornment,
-  IconButton,
-} from "@mui/material";
-import {
-  Visibility,
-  VisibilityOff,
-  CheckCircle as CheckIcon,
-} from "@mui/icons-material";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { brand } from "../../theme";
-
-/* Features que se muestran en el panel izquierdo */
-const features = [
-  {
-    title: "Gestión integral",
-    description: "Administra todas las áreas de tu empresa desde una única plataforma integrada.",
-  },
-  {
-    title: "Análisis avanzado",
-    description: "Obtén informes detallados y visualizaciones para tomar mejores decisiones de negocio.",
-  },
-  {
-    title: "Seguridad de datos",
-    description: "Protección de nivel empresarial para mantener tus datos seguros y cumplir con las normativas.",
-  },
-];
+import { notify } from "../../hooks/useToast";
+import "./login.css";
 
 export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
-  /* Estado del formulario */
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  
+  if (isAuthenticated) return <Navigate to="/" replace />;
 
-  /* Si ya está autenticado, redirigir al dashboard */
-  if (isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
-
-  /* Enviar formulario de login */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
     if (!identifier.trim() || !password.trim()) {
-      setError("Por favor completa todos los campos");
+      setError("Por favor completa todos los campos.");
       return;
     }
-
     setLoading(true);
     try {
       await login({ identifier: identifier.trim(), password });
     } catch (err: unknown) {
       const axiosError = err as { response?: { data?: { error?: string } } };
-      setError(axiosError.response?.data?.error || "Error al iniciar sesión");
+      setError(axiosError.response?.data?.error || "Error al iniciar sesión. Verifica tus credenciales.");
     } finally {
       setLoading(false);
     }
   };
 
+  /* PKCE helpers: code_verifier + code_challenge (S256). */
+  const b64url = (bytes: Uint8Array) =>
+    btoa(String.fromCharCode(...bytes))
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+
+  const generatePkce = async () => {
+    const verifierBytes = crypto.getRandomValues(new Uint8Array(32));
+    const verifier = b64url(verifierBytes);
+    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier));
+    const challenge = b64url(new Uint8Array(digest));
+    return { verifier, challenge };
+  };
+
+  /* Redirige al flujo OIDC de Keycloak con hint del IdP externo. */
+  const handleSso = async (idpAlias: string) => {
+    const kcUrl = import.meta.env.VITE_KEYCLOAK_URL || "http://localhost:8088";
+    const realm = import.meta.env.VITE_KEYCLOAK_REALM || "xtask-default";
+    const clientId = import.meta.env.VITE_KEYCLOAK_CLIENT_ID || "xtask-frontend";
+    const redirect = encodeURIComponent(`${window.location.origin}/auth/callback`);
+    const state = crypto.randomUUID();
+    const { verifier, challenge } = await generatePkce();
+    sessionStorage.setItem("kc_state", state);
+    sessionStorage.setItem("kc_verifier", verifier);
+    const url =
+      `${kcUrl}/realms/${realm}/protocol/openid-connect/auth` +
+      `?client_id=${clientId}` +
+      `&redirect_uri=${redirect}` +
+      `&response_type=code` +
+      `&scope=${encodeURIComponent("openid email profile")}` +
+      `&kc_idp_hint=${idpAlias}` +
+      `&state=${state}` +
+      `&code_challenge=${challenge}` +
+      `&code_challenge_method=S256`;
+    window.location.href = url;
+  };
+
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh" }}>
-      {/* ── Panel izquierdo: branding ───────────────────────── */}
-      <Box
-        sx={{
-          flex: 1,
-          display: { xs: "none", md: "flex" },
-          flexDirection: "column",
-          justifyContent: "center",
-          px: { md: 6, lg: 10 },
-          py: 6,
-          background: `linear-gradient(135deg, ${brand.navy} 0%, #16213e 50%, ${brand.purpleDark} 100%)`,
-          color: "white",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/* Círculos decorativos de fondo */}
-        <Box
-          sx={{
-            position: "absolute",
-            top: -100,
-            right: -100,
-            width: 300,
-            height: 300,
-            borderRadius: "50%",
-            background: `radial-gradient(circle, ${brand.purple}33, transparent)`,
-          }}
-        />
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: -60,
-            left: -60,
-            width: 200,
-            height: 200,
-            borderRadius: "50%",
-            background: `radial-gradient(circle, ${brand.accent}22, transparent)`,
-          }}
-        />
+    <div className="login-d">
+      {/* ── Top bar ──────────────────────────────────────── */}
+      <header className="top">
+        <Link to="/landing" className="brand-link" aria-label="Volver al landing de Xtask">
+          <span className="brand">
+            <span className="logo-mark">X</span>
+            <span>Xtask</span>
+          </span>
+        </Link>
+        <div className="top-right">
+          <span className="pill">app.xtask.io · operativo</span>
+          <button type="button" className="back-link" onClick={() => navigate("/landing")} aria-label="Volver al landing">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Volver al sitio
+          </button>
+          <a href="mailto:contacto@xtask.co">¿Sin cuenta?</a>
+        </div>
+      </header>
 
-        {/* Logo */}
-        <Typography variant="h4" fontWeight={800} mb={6} sx={{ color: "white", position: "relative" }}>
-          XTask
-        </Typography>
+      {/* ── Center stage ─────────────────────────────────── */}
+      <main className="stage">
+        <div className="card">
+          <p className="cli">
+            <span className="prompt">~/xtask</span>
+            <span>auth login —tenant andorra-acme</span>
+            <span className="cursor" />
+          </p>
 
-        {/* Título principal */}
-        <Typography variant="h3" fontWeight={800} mb={2} lineHeight={1.2} sx={{ position: "relative" }}>
-          Plataforma de gestión empresarial
-        </Typography>
+          <h1>Iniciar sesión</h1>
+          <p className="sub">
+            Continúa con tu identidad corporativa, o usa email y contraseña abajo.
+          </p>
 
-        <Typography variant="body1" mb={5} sx={{ opacity: 0.8, maxWidth: 480, position: "relative", lineHeight: 1.7 }}>
-          Accede a nuestra completa plataforma de gestión empresarial. Administra proyectos, finanzas, recursos humanos y más en un solo lugar.
-        </Typography>
+          {error && <div className="alert" role="alert">{error}</div>}
 
-        {/* Features */}
-        <Box sx={{ position: "relative" }}>
-          {features.map((feature) => (
-            <Box key={feature.title} display="flex" gap={2} mb={3}>
-              <CheckIcon sx={{ color: brand.accent, fontSize: 28, mt: 0.2 }} />
-              <Box>
-                <Typography variant="subtitle1" fontWeight={700} sx={{ color: brand.accent }}>
-                  {feature.title}
-                </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.7, color: "white", mt: 0.3 }}>
-                  {feature.description}
-                </Typography>
-              </Box>
-            </Box>
-          ))}
-        </Box>
-      </Box>
-
-      {/* ── Panel derecho: formulario ───────────────────────── */}
-      <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          px: { xs: 3, sm: 6 },
-          py: 4,
-          bgcolor: "white",
-        }}
-      >
-        <Box sx={{ width: "100%", maxWidth: 420 }}>
-          {/* Título del formulario */}
-          <Typography variant="h4" fontWeight={700} mb={1}>
-            Iniciar sesión
-          </Typography>
-          <Typography variant="body2" color="text.secondary" mb={4}>
-            Introduce tus credenciales para acceder a la plataforma
-          </Typography>
-
-          {/* Error */}
-          {error && (
-            <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
-              {error}
-            </Alert>
-          )}
-
-          {/* Formulario */}
-          <Box component="form" onSubmit={handleSubmit}>
-            {/* Campo: identificador */}
-            <Typography variant="body2" fontWeight={600} mb={0.5} color="text.primary">
-              Usuario o Email
-            </Typography>
-            <TextField
-              fullWidth
-              placeholder="admin@xtask.com"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              autoFocus
-              autoComplete="username"
-              disabled={loading}
-              size="medium"
-              sx={{ mb: 2.5 }}
-            />
-
-            {/* Campo: contraseña */}
-            <Typography variant="body2" fontWeight={600} mb={0.5} color="text.primary">
-              Contraseña
-            </Typography>
-            <TextField
-              fullWidth
-              placeholder="••••••••"
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-              disabled={loading}
-              size="medium"
-              sx={{ mb: 3 }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                      size="small"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-
-            {/* Botón submit */}
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              size="large"
-              disabled={loading}
-              sx={{
-                py: 1.5,
-                fontSize: "1rem",
-                background: `linear-gradient(135deg, ${brand.navy} 0%, ${brand.purple} 100%)`,
-                "&:hover": {
-                  background: `linear-gradient(135deg, ${brand.navy} 0%, ${brand.purpleLight} 100%)`,
-                },
-              }}
+          {/* SSO — Google Workspace via Keycloak IdP */}
+          <div className="sso-stack">
+            <button
+              className="sso-btn"
+              type="button"
+              onClick={() => handleSso("google")}
             >
-              {loading ? <CircularProgress size={24} color="inherit" /> : "Iniciar sesión"}
-            </Button>
-          </Box>
+              <svg className="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+              </svg>
+              Continuar con Google Workspace
+              <span className="kbd">G</span>
+            </button>
+          </div>
 
-          {/* Footer */}
-          <Typography variant="caption" color="text.secondary" display="block" textAlign="center" mt={4}>
-            © 2026 XTask. Todos los derechos reservados.
-          </Typography>
-        </Box>
-      </Box>
-    </Box>
+          <div className="divider">o con email</div>
+
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="field">
+              <input
+                type="text"
+                placeholder="Email o usuario"
+                autoComplete="username"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                disabled={loading}
+                aria-label="Email o usuario"
+              />
+            </div>
+
+            <div className="field field-pass">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Contraseña"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
+                aria-label="Contraseña"
+              />
+              <button
+                className="reveal-btn"
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                disabled={loading}
+              >
+                {showPassword ? "ocultar" : "ver"}
+              </button>
+            </div>
+
+            <button className="btn-submit" type="submit" disabled={loading}>
+              {loading ? (
+                <>
+                  <span className="spinner" aria-hidden="true" /> Validando…
+                </>
+              ) : (
+                <>
+                  Iniciar sesión <span className="kbd-enter">↵</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="links-row">
+            <a href="#">¿Olvidaste tu contraseña?</a>
+            <a href="#">Política de privacidad</a>
+          </div>
+        </div>
+      </main>
+
+      {/* ── Bottom bar ──────────────────────────────────── */}
+      <footer className="bottom">
+        <span>© 2026 Xtask · Andorra la Vella</span>
+        <div className="bottom-keys">
+          <span><kbd>Tab</kbd> navegar</span>
+          <span><kbd>↵</kbd> enviar</span>
+          <span><kbd>Esc</kbd> limpiar</span>
+        </div>
+      </footer>
+
+      {/* Los toasts ahora se renderizan globalmente vía sileo en App.tsx */}
+    </div>
   );
 }

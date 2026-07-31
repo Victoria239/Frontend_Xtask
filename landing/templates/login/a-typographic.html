@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Login A — Asimétrico tipográfico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505;
+    --bg2: #0B0B0B;
+    --surface: #131316;
+    --surface2: #1B1B1F;
+    --rule: #1F1F23;
+    --rule2: #2C2C32;
+    --ink: #F5F4F1;
+    --text2: #A6A29C;
+    --text3: #6E6A65;
+    --accent: #FF5A2C;
+    --accent2: #FFB593;
+    --green: #6FAB85;
+    --sans: 'Geist', sans-serif;
+    --mono: 'Geist Mono', monospace;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  .page { display: grid; grid-template-columns: 1.4fr 1fr; min-height: 100vh; }
+
+  /* ── Left: typographic statement ────────────────────────────── */
+  .left { position: relative; padding: 32px clamp(40px, 6vw, 80px); display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--rule); overflow: hidden; }
+  .left-top { display: flex; align-items: center; gap: 10px; }
+  .logo-mark { width: 22px; height: 22px; background: var(--accent); border-radius: 5px; display: grid; place-items: center; color: var(--bg); font-size: 12px; font-weight: 600; letter-spacing: -0.04em; }
+  .left-mid { padding: 8vw 0; }
+  .chapter { font-family: var(--mono); font-size: 11.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 32px; display: inline-flex; align-items: center; gap: 12px; }
+  .chapter::before { content: ""; width: 32px; height: 1px; background: var(--accent); }
+  h1.statement { font-size: clamp(48px, 6vw, 92px); font-weight: 500; line-height: 0.96; letter-spacing: -0.035em; margin: 0; color: var(--ink); text-wrap: balance; }
+  h1.statement em { font-style: italic; font-weight: 500; color: var(--accent2); }
+  .left-foot { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 11px; color: var(--text3); padding-top: 24px; border-top: 1px solid var(--rule); }
+  .left-foot .live { display: inline-flex; align-items: center; gap: 6px; color: var(--green); }
+  .left-foot .live::before { content: ""; width: 6px; height: 6px; background: var(--green); border-radius: 50%; box-shadow: 0 0 6px var(--green); }
+
+  /* ── Ambient fragments (subtle) ─────────────────────────────── */
+  .ambient { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .ambient span { position: absolute; font-family: var(--mono); font-size: 11px; color: var(--accent); opacity: 0.08; white-space: nowrap; transform: rotate(var(--rot, 0deg)); }
+
+  /* ── Right: form ────────────────────────────────────────────── */
+  .right { padding: 32px clamp(32px, 5vw, 64px); display: flex; flex-direction: column; justify-content: center; }
+  .form-wrap { width: 100%; max-width: 360px; margin: 0 auto; }
+  .form-eyebrow { font-family: var(--mono); font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+  h2.form-title { font-size: 28px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; margin: 0 0 8px; }
+  .form-sub { font-size: 14.5px; color: var(--text2); margin: 0 0 32px; line-height: 1.55; }
+
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .field input { width: 100%; padding: 13px 14px; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; color: var(--ink); font-family: var(--sans); font-size: 14.5px; transition: border-color 160ms var(--ease), background 160ms var(--ease); }
+  .field input::placeholder { color: var(--text4, #443F39); }
+  .field input:hover { border-color: var(--rule2); }
+  .field input:focus { outline: none; border-color: var(--accent); background: var(--bg2); }
+  .field-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .field-row label { margin-bottom: 0; }
+  .field-row a { font-size: 12.5px; color: var(--text2); text-decoration: none; transition: color 160ms var(--ease); }
+  .field-row a:hover { color: var(--accent2); }
+
+  .btn-submit { width: 100%; padding: 14px; background: var(--ink); color: var(--bg); border: none; border-radius: 8px; font-family: inherit; font-size: 14.5px; font-weight: 500; letter-spacing: -0.005em; cursor: pointer; margin-top: 8px; transition: background 160ms var(--ease), transform 120ms var(--ease); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-submit:hover { background: #E6E4DF; }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit .arr { transition: transform 160ms var(--ease); }
+  .btn-submit:hover .arr { transform: translateX(3px); }
+
+  .alt-sso { display: flex; gap: 8px; margin-top: 16px; }
+  .alt-sso button { flex: 1; padding: 11px; background: transparent; border: 1px solid var(--rule2); border-radius: 8px; color: var(--text2); font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 160ms var(--ease); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .alt-sso button:hover { border-color: #4F4F55; background: var(--surface); color: var(--ink); }
+  .alt-sso .ic { width: 14px; height: 14px; }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0 16px; font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+
+  .form-foot { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--rule); text-align: center; font-size: 13px; color: var(--text2); }
+  .form-foot a { color: var(--accent2); text-decoration: none; font-weight: 500; }
+  .form-foot a:hover { color: var(--accent); }
+
+  /* ── Floating help bot (continuity con landing) ─────────────── */
+  .help { position: fixed; bottom: 24px; right: 24px; width: 44px; height: 44px; background: var(--accent); border-radius: 50%; display: grid; place-items: center; color: var(--bg); font-size: 18px; cursor: pointer; transition: transform 200ms var(--ease); box-shadow: 0 8px 24px rgba(255,90,44,0.3); }
+  .help:hover { transform: scale(1.08); }
+</style></head>
+<body>
+<div class="page">
+  <section class="left">
+    <div class="ambient" aria-hidden>
+      <span style="top:20%; left:5%; --rot:-3deg">[1] política vacaciones · §2.1</span>
+      <span style="top:70%; right:8%; --rot:4deg">[2] convenio colectivo · art. 14</span>
+    </div>
+
+    <div class="left-top">
+      <span class="logo-mark">X</span>
+      <span style="font-size:15.5px; font-weight:500; letter-spacing:-0.012em">XTask</span>
+    </div>
+
+    <div class="left-mid">
+      <p class="chapter">Bienvenido de vuelta</p>
+      <h1 class="statement">
+        Tu equipo<br>
+        ya <em>citó</em><br>
+        47 fuentes<br>
+        esta semana.
+      </h1>
+    </div>
+
+    <div class="left-foot">
+      <span>tenant: andorra-acme</span>
+      <span class="live">sistema operativo</span>
+    </div>
+  </section>
+
+  <section class="right">
+    <div class="form-wrap">
+      <p class="form-eyebrow">Iniciar sesión</p>
+      <h2 class="form-title">Continúa donde lo dejaste.</h2>
+      <p class="form-sub">Accede a tu plataforma XTask con tus credenciales corporativas o el SSO de tu organización.</p>
+
+      <form>
+        <div class="field">
+          <label>Usuario o email</label>
+          <input type="text" placeholder="ana.garcia@acme.com" autocomplete="username">
+        </div>
+
+        <div class="field">
+          <div class="field-row">
+            <label>Contraseña</label>
+            <a href="#">¿Olvidaste tu contraseña?</a>
+          </div>
+          <input type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+
+        <button class="btn-submit" type="submit">
+          Iniciar sesión <span class="arr">→</span>
+        </button>
+
+        <div class="divider">o continúa con</div>
+
+        <div class="alt-sso">
+          <button type="button">
+            <svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Google
+          </button>
+          <button type="button">
+            <svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M21.582 6.186a2.506 2.506 0 0 0-1.768-1.768C18.254 4 12 4 12 4s-6.254 0-7.814.418a2.506 2.506 0 0 0-1.768 1.768C2 7.746 2 12 2 12s0 4.254.418 5.814a2.506 2.506 0 0 0 1.768 1.768C5.746 20 12 20 12 20s6.254 0 7.814-.418a2.506 2.506 0 0 0 1.768-1.768C22 16.254 22 12 22 12s0-4.254-.418-5.814zM9.964 14.598V9.402l5.226 2.598-5.226 2.598z"/></svg>
+            Microsoft
+          </button>
+          <button type="button">
+            <svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12s5.374 12 12 12 12-5.373 12-12S18.626 0 12 0zm9.834 6h-3.583a14.456 14.456 0 0 0-1.297-3.358A10.005 10.005 0 0 1 21.834 6zM14.5 2.158c.94 1.124 1.71 2.428 2.272 3.842h-4.272V2.054c.692.022 1.358.067 2 .104zM12 2c-.692 0-1.358.045-2 .104V6h-2.272a16.59 16.59 0 0 1 2.272-3.842c.642-.037 1.308-.082 2-.104z"/></svg>
+            SSO SAML
+          </button>
+        </div>
+      </form>
+
+      <div class="form-foot">
+        ¿Aún no tienes cuenta? <a href="#">Solicitar acceso →</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<button class="help" aria-label="Ayuda">?</button>
+</body></html>

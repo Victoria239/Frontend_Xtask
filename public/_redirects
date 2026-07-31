@@ -1,0 +1,4 @@
+# Netlify SPA fallback.
+# React Router necesita que cualquier path no encontrado devuelva index.html.
+# Las llamadas al API se hacen directo a Render via VITE_API_URL — no proxy aquí.
+/*  /index.html  200

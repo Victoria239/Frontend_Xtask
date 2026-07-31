@@ -18,10 +18,11 @@ export interface User {
   username: string;
   email: string;
   fullName: string;
-  role: "admin" | "manager" | "user";
+  role: "admin" | "manager" | "member" | "viewer" | "user";
 }
 
 export interface LoginResponse {
   token: string;
+  refresh_token?: string;
   user: User;
 }

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Background: aubergine brand -->
+  <rect width="64" height="64" rx="12" ry="12" fill="#251948"/>
+  <!-- Symbol: cyan X with circuit nodes (una tinta variant from brandbook) -->
+  <g stroke="#02BDEA" stroke-width="5.5" stroke-linecap="round" fill="none">
+    <!-- Two strokes forming the X -->
+    <path d="M14 14 L50 50"/>
+    <path d="M50 14 L14 50"/>
+  </g>
+  <!-- Circuit nodes at the four endpoints -->
+  <g fill="#02BDEA">
+    <circle cx="14" cy="14" r="3.5"/>
+    <circle cx="50" cy="14" r="3.5"/>
+    <circle cx="14" cy="50" r="3.5"/>
+    <circle cx="50" cy="50" r="3.5"/>
+  </g>
+</svg>

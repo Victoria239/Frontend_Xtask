@@ -7,6 +7,18 @@ import type { PaginatedResponse, Employee, EmployeeCreate, EmployeeUpdate } from
 export const getEmployees = (params?: Record<string, unknown>) =>
   apiClient.get<PaginatedResponse<Employee>>("/empleados", { params }).then((r) => r.data);
 
+/* Org chart como árbol jerárquico */
+export interface OrgNode {
+  id: number;
+  full_name: string;
+  position: string;
+  department: string;
+  manager_id: number | null;
+  reports: OrgNode[];
+}
+export const getOrgChart = () =>
+  apiClient.get<OrgNode[]>("/empleados/org-chart/tree").then((r) => r.data);
+
 /* Obtener un empleado por ID */
 export const getEmployee = (id: number) =>
   apiClient.get<Employee>(`/empleados/${id}`).then((r) => r.data);

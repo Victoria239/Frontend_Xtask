@@ -1,0 +1,190 @@
+{
+  "app": {
+    "name": "XTask",
+    "tagline": "Plataforma SaaS multi-tenant para pessoas, projetos e compensação"
+  },
+  "nav": {
+    "inbox": "Caixa de entrada",
+    "mySpace": "Meu espaço",
+    "executive": "Executivo",
+    "assistant": "Assistente",
+    "vault": "Cofre",
+    "groups": {
+      "people": "Pessoas",
+      "work": "Trabalho",
+      "finance": "Finanças",
+      "documents": "Documentos",
+      "system": "Sistema"
+    },
+    "items": {
+      "employees": "Funcionários",
+      "orgChart": "Organograma",
+      "onboarding": "Integração",
+      "leaves": "Ausências",
+      "recruiting": "Recrutamento",
+      "skills": "Competências",
+      "retention": "Retenção",
+      "reviews": "Avaliações 360°",
+      "projects": "Projetos",
+      "okrs": "OKRs",
+      "kpis": "KPIs",
+      "forecast": "Previsões",
+      "payroll": "Folha de pagamento",
+      "finance": "Finanças",
+      "plans": "Comissões",
+      "payouts": "Pagamentos",
+      "benefits": "Benefícios",
+      "approvals": "Aprovações",
+      "compAnalytics": "Análise de Compensação",
+      "documents": "Documentos",
+      "contracts": "Contratos",
+      "docgen": "Gerador",
+      "admin": "Administração",
+      "settings": "Configurações",
+      "peopleAnalytics": "People Analytics"
+    }
+  },
+  "common": {
+    "loading": "Carregando…",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "create": "Criar",
+    "search": "Pesquisar",
+    "filter": "Filtrar",
+    "all": "Todos",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "yes": "Sim",
+    "no": "Não",
+    "actions": "Ações",
+    "status": "Estado",
+    "name": "Nome",
+    "date": "Data",
+    "total": "Total",
+    "error": "Erro",
+    "success": "Sucesso",
+    "warning": "Aviso",
+    "info": "Informação",
+    "logout": "Sair",
+    "profile": "Perfil",
+    "language": "Idioma",
+    "noResults": "Sem resultados",
+    "submit": "Enviar",
+    "close": "Fechar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior"
+  },
+  "login": {
+    "title": "Iniciar sessão",
+    "subtitle": "Aceda à sua conta XTask",
+    "email": "Email",
+    "password": "Palavra-passe",
+    "rememberMe": "Lembrar-me",
+    "forgotPassword": "Esqueceu-se da palavra-passe?",
+    "loginButton": "Entrar",
+    "loginWithKeycloak": "Entrar com SSO"
+  },
+  "dashboard": {
+    "welcome": "Olá",
+    "myReports": "Subordinados diretos",
+    "myContracts": "Os meus contratos",
+    "myLeaves": "As minhas ausências",
+    "myOKRs": "Os meus OKRs",
+    "pendingReviews": "Avaliações pendentes",
+    "suggestedBenefits": "Benefícios sugeridos",
+    "requestLeave": "Solicitar ausência",
+    "team": "A minha equipa"
+  },
+  "bi": {
+    "title": "Painel executivo",
+    "subtitle": "Métricas norte do XTask",
+    "arr": "ARR",
+    "headcount": "Quadro",
+    "okrAvg": "OKR médio",
+    "pnl": "P&L anual",
+    "topClients": "Top clientes",
+    "highRiskEmployees": "Funcionários de alto risco",
+    "headcountByTeam": "Quadro por equipa",
+    "financialBreakdown": "Detalhe financeiro",
+    "hiringTrend": "Tendência do quadro",
+    "attritionRisk": "Risco de saída"
+  },
+  "attrition": {
+    "title": "Risco de saída de talento",
+    "subtitle": "Pontuação 0-100 por funcionário",
+    "high": "Alto",
+    "medium": "Médio",
+    "low": "Baixo",
+    "totalEmployees": "Total funcionários",
+    "highRisk": "Alto risco",
+    "mediumRisk": "Risco médio",
+    "lowRisk": "Baixo risco",
+    "topDrivers": "Fatores principais",
+    "factorBreakdown": "Detalhe por fator"
+  },
+  "reviews": {
+    "title": "Avaliações 360°",
+    "subtitle": "Ciclos de avaliação de desempenho",
+    "pending": "Pendentes",
+    "myReviews": "As minhas avaliações",
+    "admin": "Administração",
+    "newCycle": "Novo ciclo",
+    "cycleStatus": {
+      "open": "Aberto",
+      "in_progress": "Em curso",
+      "closed": "Fechado"
+    },
+    "roles": {
+      "self": "Auto-avaliação",
+      "manager": "Chefe",
+      "peer": "Par",
+      "report": "Subordinado"
+    }
+  },
+  "comp": {
+    "title": "Análise de Compensação",
+    "subtitle": "Faixas salariais e outliers",
+    "totalPayroll": "Folha anual",
+    "avgSalary": "Salário médio",
+    "medianSalary": "Salário mediano",
+    "gapFactor": "Fator de hiato",
+    "compaRatio": "Compa-ratio médio",
+    "bands": "Faixas salariais",
+    "outliers": "Outliers detetados",
+    "topEarners": "Top 5 salários"
+  },
+  "assistant": {
+    "title": "Assistente IA",
+    "placeholder": "Pergunte-me o que precisar…",
+    "send": "Enviar",
+    "sources": {
+      "vault": "Cofre",
+      "docs": "Documentos",
+      "db": "BD"
+    }
+  },
+  "notifications": {
+    "title": "Notificações",
+    "markAllRead": "Marcar todas como lidas",
+    "empty": "Sem notificações",
+    "viewAll": "Ver todas"
+  },
+  "people": {
+    "title": "People Analytics",
+    "subtitle": "Inteligência de talento: 9-box, antiguidade, span of control e risco por segmento.",
+    "headcount": "Quadro",
+    "avgTenure": "Antiguidade média",
+    "avgPerf": "Desempenho médio",
+    "managers": "Chefes",
+    "nineBox": "Desempenho × Retenção",
+    "nineBoxHint": "Eixo X: desempenho · Eixo Y: retenção (inverso do risco de saída)",
+    "tenureDist": "Distribuição de antiguidade",
+    "bandSaturation": "Saturação de faixas",
+    "spanOfControl": "Span of control",
+    "segmentRisk": "Risco de saída por segmento",
+    "diversity": "Composição por departamento"
+  }
+}

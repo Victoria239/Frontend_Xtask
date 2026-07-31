@@ -1,0 +1,190 @@
+{
+  "app": {
+    "name": "XTask",
+    "tagline": "Plataforma SaaS multi-tenant para personas, proyectos y compensación"
+  },
+  "nav": {
+    "inbox": "Inbox",
+    "mySpace": "Mi espacio",
+    "executive": "Ejecutivo",
+    "assistant": "Asistente",
+    "vault": "Bóveda",
+    "groups": {
+      "people": "Personas",
+      "work": "Trabajo",
+      "finance": "Finanzas",
+      "documents": "Documentos",
+      "system": "Sistema"
+    },
+    "items": {
+      "employees": "Empleados",
+      "orgChart": "Organigrama",
+      "onboarding": "Onboarding",
+      "leaves": "Ausencias",
+      "recruiting": "Recruiting",
+      "skills": "Habilidades",
+      "retention": "Retención",
+      "reviews": "Reviews 360°",
+      "projects": "Proyectos",
+      "okrs": "OKRs",
+      "kpis": "KPIs",
+      "forecast": "Forecast",
+      "payroll": "Nóminas",
+      "finance": "Finanzas",
+      "plans": "Comisiones",
+      "payouts": "Pagos",
+      "benefits": "Beneficios",
+      "approvals": "Aprobaciones",
+      "compAnalytics": "Comp Analytics",
+      "documents": "Documentos",
+      "contracts": "Contratos",
+      "docgen": "Generador",
+      "admin": "Admin",
+      "settings": "Configuración",
+      "peopleAnalytics": "People Analytics"
+    }
+  },
+  "common": {
+    "loading": "Cargando…",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "all": "Todos",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "yes": "Sí",
+    "no": "No",
+    "actions": "Acciones",
+    "status": "Estado",
+    "name": "Nombre",
+    "date": "Fecha",
+    "total": "Total",
+    "error": "Error",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "info": "Información",
+    "logout": "Cerrar sesión",
+    "profile": "Perfil",
+    "language": "Idioma",
+    "noResults": "Sin resultados",
+    "submit": "Enviar",
+    "close": "Cerrar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior"
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "subtitle": "Accede a tu cuenta de XTask",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "rememberMe": "Recordarme",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "loginButton": "Entrar",
+    "loginWithKeycloak": "Entrar con SSO"
+  },
+  "dashboard": {
+    "welcome": "Hola",
+    "myReports": "Reportes directos",
+    "myContracts": "Mis contratos",
+    "myLeaves": "Mis ausencias",
+    "myOKRs": "Mis OKRs",
+    "pendingReviews": "Reviews pendientes",
+    "suggestedBenefits": "Beneficios sugeridos",
+    "requestLeave": "Solicitar ausencia",
+    "team": "Mi equipo"
+  },
+  "bi": {
+    "title": "Dashboard ejecutivo",
+    "subtitle": "Métricas norte de XTask",
+    "arr": "ARR",
+    "headcount": "Headcount",
+    "okrAvg": "OKR avg",
+    "pnl": "P&L anual",
+    "topClients": "Top clientes",
+    "highRiskEmployees": "Empleados en alto riesgo",
+    "headcountByTeam": "Headcount por equipo",
+    "financialBreakdown": "Financial breakdown",
+    "hiringTrend": "Headcount trend",
+    "attritionRisk": "Riesgo de fuga"
+  },
+  "attrition": {
+    "title": "Riesgo de fuga de talento",
+    "subtitle": "Score 0-100 por empleado",
+    "high": "Alto",
+    "medium": "Medio",
+    "low": "Bajo",
+    "totalEmployees": "Total empleados",
+    "highRisk": "Alto riesgo",
+    "mediumRisk": "Riesgo medio",
+    "lowRisk": "Bajo riesgo",
+    "topDrivers": "Top drivers",
+    "factorBreakdown": "Breakdown por factor"
+  },
+  "reviews": {
+    "title": "Reviews 360°",
+    "subtitle": "Evaluaciones por ciclo",
+    "pending": "Pendientes",
+    "myReviews": "Mis evaluaciones",
+    "admin": "Admin",
+    "newCycle": "Nuevo ciclo",
+    "cycleStatus": {
+      "open": "Abierto",
+      "in_progress": "En progreso",
+      "closed": "Cerrado"
+    },
+    "roles": {
+      "self": "Auto-evaluación",
+      "manager": "Manager",
+      "peer": "Peer",
+      "report": "Subordinado"
+    }
+  },
+  "comp": {
+    "title": "Compensation Analytics",
+    "subtitle": "Bandas salariales y outliers",
+    "totalPayroll": "Payroll anual",
+    "avgSalary": "Avg salary",
+    "medianSalary": "Median salary",
+    "gapFactor": "Gap factor",
+    "compaRatio": "Compa-ratio avg",
+    "bands": "Bandas salariales",
+    "outliers": "Outliers detectados",
+    "topEarners": "Top 5 earners"
+  },
+  "assistant": {
+    "title": "Asistente IA",
+    "placeholder": "Pregúntame lo que necesites…",
+    "send": "Enviar",
+    "sources": {
+      "vault": "Bóveda",
+      "docs": "Docs",
+      "db": "DB"
+    }
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todas como leídas",
+    "empty": "Sin notificaciones",
+    "viewAll": "Ver todas"
+  },
+  "people": {
+    "title": "People Analytics",
+    "subtitle": "Inteligencia de talento: 9-box, antigüedad, span of control y riesgo por segmento.",
+    "headcount": "Headcount",
+    "avgTenure": "Antigüedad media",
+    "avgPerf": "Performance media",
+    "managers": "Managers",
+    "nineBox": "Performance × Retención",
+    "nineBoxHint": "Eje X: performance · Eje Y: retención (inverso del riesgo de fuga)",
+    "tenureDist": "Distribución de antigüedad",
+    "bandSaturation": "Saturación de bandas",
+    "spanOfControl": "Span of control",
+    "segmentRisk": "Riesgo de fuga por segmento",
+    "diversity": "Composición por departamento"
+  }
+}

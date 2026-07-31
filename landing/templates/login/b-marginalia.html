@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Login B — Citation marginalia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505;
+    --bg2: #0B0B0B;
+    --surface: #131316;
+    --surface2: #1B1B1F;
+    --rule: #1F1F23;
+    --rule2: #2C2C32;
+    --ink: #F5F4F1;
+    --text2: #A6A29C;
+    --text3: #6E6A65;
+    --text4: #443F39;
+    --accent: #FF5A2C;
+    --accent2: #FFB593;
+    --green: #6FAB85;
+    --sans: 'Geist', sans-serif;
+    --mono: 'Geist Mono', monospace;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+  .page { display: grid; grid-template-columns: 1.3fr 1fr; min-height: 100vh; }
+
+  /* ── Left: live copilot panel ───────────────────────────────── */
+  .left { padding: 28px clamp(32px, 4vw, 56px); display: flex; flex-direction: column; gap: 32px; background: var(--bg2); border-right: 1px solid var(--rule); position: relative; overflow: hidden; }
+  .left-head { display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .logo-mark { width: 22px; height: 22px; background: var(--accent); border-radius: 5px; display: grid; place-items: center; color: var(--bg); font-size: 12px; font-weight: 600; letter-spacing: -0.04em; }
+  .breadcrumb { font-family: var(--mono); font-size: 11px; color: var(--text3); display: flex; gap: 8px; align-items: center; }
+  .breadcrumb .sep { color: var(--text4); }
+  .breadcrumb .live { color: var(--green); display: inline-flex; align-items: center; gap: 6px; }
+  .breadcrumb .live::before { content: ""; width: 6px; height: 6px; background: var(--green); border-radius: 50%; box-shadow: 0 0 6px var(--green); }
+
+  .left-title { font-family: var(--mono); font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; display: inline-flex; align-items: center; gap: 12px; }
+  .left-title::before { content: ""; width: 28px; height: 1px; background: var(--accent); }
+
+  /* Q/A composition */
+  .qa { display: flex; flex-direction: column; gap: 20px; max-width: 640px; }
+  .q { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; display: flex; gap: 12px; align-items: center; }
+  .q .av { width: 26px; height: 26px; border-radius: 50%; background: var(--surface2); display: grid; place-items: center; font-family: var(--mono); font-size: 11px; color: var(--text2); flex-shrink: 0; border: 1px solid var(--rule2); }
+  .q .text { font-size: 14.5px; color: var(--ink); }
+
+  .a { display: flex; gap: 14px; padding: 4px; }
+  .a .av { width: 30px; height: 30px; border-radius: 7px; background: var(--accent); display: grid; place-items: center; color: var(--bg); font-size: 14px; font-weight: 600; flex-shrink: 0; }
+  .a .body { flex: 1; }
+  .a .body p { margin: 0 0 8px; font-size: 14.5px; line-height: 1.6; color: var(--ink); }
+  .a .body strong { color: var(--accent2); font-weight: 500; }
+  .a .body .cite { font-family: var(--mono); color: var(--accent); font-size: 11px; font-weight: 500; vertical-align: super; line-height: 0; margin-left: 2px; padding: 1px 5px; background: rgba(255,90,44,0.1); border-radius: 3px; cursor: help; }
+
+  /* Marginalia (right column of left panel) */
+  .sources { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--rule); }
+  .sources-title { font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; }
+  .source { padding: 14px 0; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: 28px 1fr; gap: 12px; }
+  .source:last-child { border-bottom: 0; }
+  .source-id { font-family: var(--mono); font-size: 11px; color: var(--accent); font-weight: 500; padding-top: 2px; }
+  .source-name { font-size: 13.5px; color: var(--ink); font-weight: 500; letter-spacing: -0.01em; margin: 0 0 4px; }
+  .source-snip { font-size: 12.5px; color: var(--text2); line-height: 1.5; margin: 0; }
+  .source-meta { margin-top: 6px; font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .left-foot { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 11px; color: var(--text3); }
+  .left-foot a { color: var(--text2); text-decoration: none; transition: color 160ms var(--ease); }
+  .left-foot a:hover { color: var(--ink); }
+
+  /* ── Right: form ────────────────────────────────────────────── */
+  .right { padding: 48px clamp(32px, 5vw, 64px); display: flex; flex-direction: column; justify-content: center; }
+  .form-wrap { width: 100%; max-width: 360px; margin: 0 auto; }
+  .form-eyebrow { font-family: var(--mono); font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; display: inline-flex; align-items: center; gap: 10px; }
+  .form-eyebrow::before { content: ""; width: 18px; height: 1px; background: var(--accent); }
+  h2.form-title { font-size: 30px; font-weight: 500; letter-spacing: -0.025em; line-height: 1.1; margin: 0 0 12px; }
+  h2.form-title em { font-style: italic; font-weight: 500; color: var(--accent2); }
+  .form-sub { font-size: 14.5px; color: var(--text2); margin: 0 0 36px; line-height: 1.55; }
+
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .field input { width: 100%; padding: 13px 14px; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; color: var(--ink); font-family: var(--sans); font-size: 14.5px; transition: border-color 160ms var(--ease), background 160ms var(--ease); }
+  .field input::placeholder { color: var(--text4); }
+  .field input:hover { border-color: var(--rule2); }
+  .field input:focus { outline: none; border-color: var(--accent); background: var(--bg2); }
+  .field-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .field-row label { margin-bottom: 0; }
+  .field-row a { font-size: 12.5px; color: var(--text2); text-decoration: none; transition: color 160ms var(--ease); }
+  .field-row a:hover { color: var(--accent2); }
+
+  .btn-submit { width: 100%; padding: 14px; background: var(--ink); color: var(--bg); border: none; border-radius: 8px; font-family: inherit; font-size: 14.5px; font-weight: 500; letter-spacing: -0.005em; cursor: pointer; margin-top: 8px; transition: background 160ms var(--ease), transform 120ms var(--ease); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn-submit:hover { background: #E6E4DF; }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit .arr { transition: transform 160ms var(--ease); }
+  .btn-submit:hover .arr { transform: translateX(3px); }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 24px 0 16px; font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+
+  .sso { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .sso button { padding: 11px; background: transparent; border: 1px solid var(--rule2); border-radius: 8px; color: var(--text2); font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 160ms var(--ease); display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .sso button:hover { border-color: #4F4F55; background: var(--surface); color: var(--ink); }
+
+  .form-foot { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; color: var(--text3); }
+  .form-foot a { color: var(--text2); text-decoration: none; }
+  .form-foot a:hover { color: var(--ink); }
+</style></head>
+<body>
+<div class="page">
+  <section class="left">
+    <div class="left-head">
+      <div class="brand">
+        <span class="logo-mark">X</span>
+        <span style="font-size:15.5px; font-weight:500; letter-spacing:-0.012em">XTask</span>
+      </div>
+      <div class="breadcrumb">
+        <span>app.xtask.io</span>
+        <span class="sep">/</span>
+        <span>asistente</span>
+        <span class="sep">·</span>
+        <span class="live">live</span>
+      </div>
+    </div>
+
+    <span class="left-title">Mientras te conectas, el copiloto sigue trabajando</span>
+
+    <div class="qa">
+      <div class="q">
+        <span class="av">M</span>
+        <span class="text">¿Cuántos días de vacaciones tiene Ana con 6 años de antigüedad?</span>
+      </div>
+
+      <div class="a">
+        <span class="av">X</span>
+        <div class="body">
+          <p>
+            Ana tiene derecho a <strong>25 días hábiles</strong>: los 22 base más 3 adicionales por superar los 5 años de antigüedad<span class="cite">[1]</span>, conforme a la política vigente del tenant<span class="cite">[2]</span>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sources">
+      <p class="sources-title">Fuentes citadas en el corpus · andorra-acme</p>
+
+      <div class="source">
+        <span class="source-id">[1]</span>
+        <div>
+          <p class="source-name">Política de vacaciones 2026</p>
+          <p class="source-snip">"Los empleados con antigüedad superior a cinco años reciben tres días hábiles adicionales sobre los veintidós base."</p>
+          <p class="source-meta">§ 2.1 · ingestado 4 may 2026</p>
+        </div>
+      </div>
+
+      <div class="source">
+        <span class="source-id">[2]</span>
+        <div>
+          <p class="source-name">Convenio colectivo</p>
+          <p class="source-snip">"Las vacaciones son derecho irrenunciable de los trabajadores con contrato indefinido."</p>
+          <p class="source-meta">cláusula 14 · vigente 2026</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="left-foot">
+      <span>RAG · 2 fuentes · 0.4s</span>
+      <a href="#">Ver historial completo →</a>
+    </div>
+  </section>
+
+  <section class="right">
+    <div class="form-wrap">
+      <p class="form-eyebrow">Inicio de sesión</p>
+      <h2 class="form-title">Continúa donde tu equipo <em>lo dejó</em>.</h2>
+      <p class="form-sub">Accede con tus credenciales o el SSO de tu organización. Tu sesión queda asociada al tenant <strong style="color:var(--ink);font-weight:500">andorra-acme</strong>.</p>
+
+      <form>
+        <div class="field">
+          <label>Usuario o email corporativo</label>
+          <input type="text" placeholder="ana.garcia@acme.com" autocomplete="username">
+        </div>
+
+        <div class="field">
+          <div class="field-row">
+            <label>Contraseña</label>
+            <a href="#">¿Olvidaste tu contraseña?</a>
+          </div>
+          <input type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+
+        <button class="btn-submit" type="submit">
+          Iniciar sesión <span class="arr">→</span>
+        </button>
+
+        <div class="divider">o continúa con SSO</div>
+
+        <div class="sso">
+          <button type="button">Google Workspace</button>
+          <button type="button">Microsoft / Azure AD</button>
+        </div>
+      </form>
+
+      <div class="form-foot">
+        <span>¿Sin cuenta aún? <a href="#">Solicita acceso →</a></span>
+        <a href="#">Estado del sistema</a>
+      </div>
+    </div>
+  </section>
+</div>
+</body></html>

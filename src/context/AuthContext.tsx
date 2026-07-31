@@ -1,10 +1,13 @@
-/* Contexto global de autenticación */
+/* Contexto global de autenticación — Keycloak-backed.
+ *
+ * El backend hace el password-grant contra Keycloak y devuelve access + refresh.
+ * Aquí solo almacenamos ambos y los exponemos al cliente HTTP.
+ */
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
-import type { User, LoginRequest, RegisterRequest } from "../types";
+import type { User, LoginRequest } from "../types";
 import { authApi } from "../api";
 
-/* Forma del contexto */
 interface AuthContextType {
   user: User | null;
   token: string | null;
@@ -13,72 +16,88 @@ interface AuthContextType {
   isManager: boolean;
   loading: boolean;
   login: (data: LoginRequest) => Promise<void>;
-  register: (data: RegisterRequest) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-/* Provider que envuelve la app */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  /* Al montar, restaurar sesión desde localStorage */
   useEffect(() => {
+    /* Si el token JWT está vencido (exp pasado) → limpiar y forzar re-login.
+     * Decoda el payload sin verificar firma (solo para chequear exp). */
+    const isJwtExpired = (jwt: string): boolean => {
+      try {
+        const payload = JSON.parse(atob(jwt.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+        if (!payload.exp) return false;
+        return payload.exp * 1000 < Date.now();
+      } catch { return true; }
+    };
+
     const savedToken = localStorage.getItem("auth_token");
+    const savedRefresh = localStorage.getItem("auth_refresh");
     const savedUser = localStorage.getItem("auth_user");
-    if (savedToken && savedUser) {
+
+    if (savedToken && savedUser && !isJwtExpired(savedToken)) {
       setToken(savedToken);
+      setRefreshToken(savedRefresh);
       setUser(JSON.parse(savedUser));
+    } else if (savedToken) {
+      /* Token vencido o ilegible → limpieza completa */
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("auth_refresh");
+      localStorage.removeItem("auth_user");
     }
     setLoading(false);
   }, []);
 
-  /* Guardar sesión en localStorage */
-  const saveSession = (authToken: string, authUser: User) => {
-    localStorage.setItem("auth_token", authToken);
+  const saveSession = (accessToken: string, refresh: string | undefined, authUser: User) => {
+    localStorage.setItem("auth_token", accessToken);
+    if (refresh) localStorage.setItem("auth_refresh", refresh);
     localStorage.setItem("auth_user", JSON.stringify(authUser));
-    setToken(authToken);
+    setToken(accessToken);
+    setRefreshToken(refresh ?? null);
     setUser(authUser);
   };
 
-  /* Iniciar sesión */
   const login = async (data: LoginRequest) => {
     const response = await authApi.login(data);
-    saveSession(response.token, response.user);
+    saveSession(response.token, response.refresh_token, response.user);
   };
 
-  /* Registrar usuario */
-  const register = async (data: RegisterRequest) => {
-    const response = await authApi.register(data);
-    saveSession(response.token, response.user);
-  };
-
-  /* Cerrar sesión */
-  const logout = () => {
+  const logout = async () => {
+    if (refreshToken) {
+      try {
+        await authApi.logout(refreshToken);
+      } catch {
+        /* best-effort */
+      }
+    }
     localStorage.removeItem("auth_token");
+    localStorage.removeItem("auth_refresh");
     localStorage.removeItem("auth_user");
     setToken(null);
+    setRefreshToken(null);
     setUser(null);
   };
 
-  /* Propiedades derivadas del rol */
   const isAuthenticated = !!token && !!user;
   const isAdmin = user?.role === "admin";
   const isManager = user?.role === "admin" || user?.role === "manager";
 
   return (
     <AuthContext.Provider
-      value={{ user, token, isAuthenticated, isAdmin, isManager, loading, login, register, logout }}
+      value={{ user, token, isAuthenticated, isAdmin, isManager, loading, login, logout }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
 
-/* Hook para consumir el contexto */
 export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
   if (!context) {

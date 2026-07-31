@@ -10,7 +10,9 @@ import {
   Tooltip,
 } from "@mui/material";
 import { Logout as LogoutIcon } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
+import LanguageSelector from "../LanguageSelector";
 import { SIDEBAR_WIDTH } from "./Sidebar";
 
 /* Colores por rol */
@@ -22,6 +24,7 @@ const roleColors: Record<string, "primary" | "secondary" | "default"> = {
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <AppBar
@@ -36,6 +39,11 @@ export default function Navbar() {
         {/* Espaciador */}
         <Box sx={{ flexGrow: 1 }} />
 
+        {/* Language selector — visible siempre */}
+        <Box sx={{ mr: 1 }}>
+          <LanguageSelector variant="compact" />
+        </Box>
+
         {/* Info del usuario */}
         {user && (
           <Box display="flex" alignItems="center" gap={2}>
@@ -48,7 +56,7 @@ export default function Navbar() {
               color={roleColors[user.role] || "default"}
               variant="outlined"
             />
-            <Tooltip title="Cerrar sesión">
+            <Tooltip title={t("common.logout")}>
               <IconButton onClick={logout} size="small" color="default">
                 <LogoutIcon />
               </IconButton>

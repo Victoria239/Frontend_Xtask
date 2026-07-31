@@ -1,0 +1,79 @@
+/* Global CSS — Xtask v5 (light content + brand cyan)
+ * MUI maneja la mayoría vía theme; aquí solo lo que escapa al alcance del theme:
+ * - Tokens CSS reutilizables desde sx custom
+ * - Selección, scrollbar, smooth scrolling
+ * - prefers-reduced-motion override
+ * - Render quality
+ */
+
+:root {
+  /* Surfaces light */
+  --bg:         #FFFFFF;
+  --bg-2:       #F7F7F9;
+  --surface:    #FFFFFF;
+  --surface-2:  #F2F2F5;
+  --rule:       #E5E5EA;
+  --rule-2:     #D1D1D6;
+
+  /* Texto dark sobre light */
+  --ink:        #1A1726;
+  --text-2:     #605C70;
+  --text-3:     #8E8A99;
+  --text-4:     #C4C2CC;
+
+  /* Brand */
+  --accent:     #02BDEA;
+  --accent-2:   #01E3D5;
+  --accent-d:   #0A4D70;
+  --brand:      #251948;
+
+  /* Sidebar — dark zone */
+  --sidebar-bg: #0F0E18;
+
+  --ease-out:   cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-press: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-move:  cubic-bezier(0.77, 0, 0.175, 1);
+
+  --font-sans:  'Gilroy', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:  'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html, body, #root {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body { margin: 0; min-height: 100vh; }
+
+::selection { background: var(--accent); color: #FFFFFF; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-2); }
+::-webkit-scrollbar-thumb {
+  background: var(--rule-2);
+  border-radius: 999px;
+  border: 2px solid var(--bg-2);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+a { color: var(--accent-d); }
+a:hover { color: var(--accent); }
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-feature-settings: "ss01";
+}

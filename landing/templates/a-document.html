@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>A — Editorial document</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400;1,500&family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4F2EE;        /* bone, not cream, no warmth-by-default */
+    --bg2: #EDEAE4;
+    --rule: #D6D1C7;
+    --ink: #0A0A0A;
+    --text2: #4A4742;
+    --text3: #76716A;
+    --accent: #B5471F;    /* deeper sienna; darker than dark-mode version */
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Geist', -apple-system, sans-serif;
+    --mono: 'Geist Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .page { display: grid; grid-template-columns: 1fr 320px; max-width: 1280px; margin: 0 auto; min-height: 100vh; }
+  .doc { padding: 64px 56px 80px; border-right: 1px solid var(--rule); }
+  .side { padding: 64px 36px 80px; background: var(--bg2); border-left: 1px solid var(--rule); }
+
+  /* header strip */
+  .strip { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 24px; border-bottom: 1px solid var(--rule); margin-bottom: 80px; font-family: var(--mono); font-size: 12px; color: var(--text3); letter-spacing: 0.02em; }
+  .strip .left { display: flex; gap: 24px; }
+  .strip .left span { color: var(--ink); }
+
+  /* hero */
+  h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(48px, 6vw, 84px); line-height: 1.04; letter-spacing: -0.025em; margin: 0 0 32px; max-width: 880px; text-wrap: balance; }
+  h1 em { font-style: italic; font-weight: 500; color: var(--accent); }
+  h1 sup { font-family: var(--mono); font-size: 0.28em; color: var(--accent); font-weight: 500; vertical-align: super; line-height: 0; margin-left: 4px; padding: 1px 5px; background: rgba(181, 71, 31, 0.1); border-radius: 3px; }
+
+  .lede { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 22px; line-height: 1.5; color: var(--text2); max-width: 60ch; margin: 0 0 48px; letter-spacing: -0.005em; }
+  .lede sup { font-family: var(--mono); font-style: normal; font-size: 11px; color: var(--accent); vertical-align: super; line-height: 0; margin-left: 2px; padding: 1px 5px; background: rgba(181, 71, 31, 0.1); border-radius: 3px; }
+
+  .meta { font-family: var(--mono); font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+
+  .cta-row { display: flex; gap: 12px; margin-top: 8px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; font-family: var(--sans); font-size: 14px; font-weight: 500; border-radius: 4px; border: 1px solid transparent; cursor: pointer; transition: all 160ms cubic-bezier(0.23,1,0.32,1); }
+  .btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+  .btn-outline { border-color: var(--ink); color: var(--ink); }
+  .btn-outline:hover { background: var(--ink); color: var(--bg); }
+
+  /* article ornaments */
+  .author { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--rule); display: flex; gap: 24px; align-items: center; }
+  .author-meta { font-family: var(--mono); font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+  .author-meta strong { color: var(--ink); font-weight: 500; text-transform: none; letter-spacing: 0; font-family: var(--serif); font-style: italic; font-size: 14px; display: block; }
+
+  /* sidebar — live citations */
+  .side-title { font-family: var(--mono); font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; padding-bottom: 12px; border-bottom: 1px solid var(--rule); margin-bottom: 24px; }
+  .cite { padding: 16px 0; border-bottom: 1px solid var(--rule); }
+  .cite-id { font-family: var(--mono); font-size: 11px; color: var(--accent); font-weight: 500; margin-bottom: 4px; }
+  .cite-source { font-family: var(--serif); font-style: italic; font-size: 14px; color: var(--ink); margin: 0 0 6px; line-height: 1.35; }
+  .cite-snippet { font-size: 12.5px; color: var(--text2); line-height: 1.5; }
+  .cite-meta { font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 8px; }
+</style></head>
+<body>
+<div class="page">
+  <main class="doc">
+    <div class="strip">
+      <div class="left">
+        <span>XTASK</span>
+        <span>Reg. Andorra · 2026</span>
+        <span>v0.2</span>
+      </div>
+      <div>folio I · §1.0</div>
+    </div>
+
+    <p class="meta">Volumen I · Tesis del producto</p>
+
+    <h1>
+      La plataforma empresarial<br>
+      que <em>cita</em> sus propias respuestas<sup>[1]</sup>,<br>
+      no las inventa.
+    </h1>
+
+    <p class="lede">
+      XTask integra HRM, compensación variable y gestión documental sobre un motor de IA que devuelve la política, contrato o métrica exacta<sup>[2]</sup> que respalda cada respuesta. Construida en Andorra para empresas en Iberia y LATAM.
+    </p>
+
+    <div class="cta-row">
+      <a class="btn btn-primary">Solicitar demo →</a>
+      <a class="btn btn-outline">Leer la tesis completa</a>
+    </div>
+
+    <div class="author">
+      <div class="author-meta">
+        <strong>Editado por el equipo XTask</strong>
+        Junio 2026 · 12 minutos de lectura · 5 capítulos · 47 referencias
+      </div>
+    </div>
+  </main>
+
+  <aside class="side">
+    <p class="side-title">Referencias citadas</p>
+
+    <div class="cite">
+      <p class="cite-id">[1]</p>
+      <p class="cite-source">Política de uso de IA empresarial — Borrador interno XTask</p>
+      <p class="cite-snippet">"Cada respuesta del asistente debe poder rastrearse a un fragmento del corpus del tenant, con sección y fecha de ingestión visibles."</p>
+      <p class="cite-meta">Andorra Acme · 4 may 2026</p>
+    </div>
+
+    <div class="cite">
+      <p class="cite-id">[2]</p>
+      <p class="cite-source">Reglamento UE 2024/1689 sobre IA — Art. 50</p>
+      <p class="cite-snippet">"Los sistemas que generen contenido deben informar al usuario sobre la naturaleza artificial del mismo y permitir la auditabilidad de sus fuentes."</p>
+      <p class="cite-meta">UE · vigente desde 2 ago 2026</p>
+    </div>
+  </aside>
+</div>
+</body></html>

@@ -355,40 +355,7 @@ export default function FinancePage() {
             </Grid>
           </Grid>
 
-          <Card sx={{ border: "1px solid", borderColor: "divider" }}>
-            <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="h6" fontWeight={700}>Nóminas Recientes</Typography>
-                <Button variant="outlined" onClick={() => navigate("/nominas")} sx={{ textTransform: "none", fontWeight: 600, borderRadius: 2, borderColor: brand.purple, color: brand.purple }}>
-                  Ir a Módulo de Nómina
-                </Button>
-              </Box>
-              <TableContainer>
-                <Table size="small">
-                  <TableHead><TableRow sx={{ bgcolor: "#fafafa" }}>
-                    <TableCell sx={{ fontWeight: 700 }}>Empleado</TableCell>
-                    <TableCell sx={{ fontWeight: 700 }}>Periodo</TableCell>
-                    <TableCell sx={{ fontWeight: 700 }}>Neto</TableCell>
-                    <TableCell sx={{ fontWeight: 700 }}>Estado</TableCell>
-                  </TableRow></TableHead>
-                  <TableBody>
-                    {payrolls.slice(0, 10).map((p) => {
-                      const emp = employees.find((e) => e.id === p.employee_id);
-                      return (
-                        <TableRow key={p.id} hover>
-                          <TableCell><Typography variant="body2" fontWeight={600}>{emp ? `${emp.first_name} ${emp.last_name}` : `Emp #${p.employee_id}`}</Typography></TableCell>
-                          <TableCell>{p.period}</TableCell>
-                          <TableCell><Typography variant="body2" fontWeight={700} color="#10b981">{fmtMoney(p.net_salary)}</Typography></TableCell>
-                          <TableCell><Chip label={p.status === "pago" || p.status === "paid" ? "Pagado" : "Pendiente"} color={p.status === "pago" || p.status === "paid" ? "success" : "warning"} size="small" sx={{ fontWeight: 600 }} /></TableCell>
-                        </TableRow>
-                      );
-                    })}
-                    {!payrolls.length && <TableRow><TableCell colSpan={4} align="center" sx={{ py: 3, color: "text.secondary" }}>Sin nóminas</TableCell></TableRow>}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
+          {/* Card "Nóminas Recientes" oculto: servicio payroll no desplegado (503). */}
         </Box>
       )}
 
